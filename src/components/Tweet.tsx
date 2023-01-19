@@ -5,6 +5,7 @@ import { FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { BsThreeDots, BsShare } from "react-icons/bs";
 import type { Tweet as TweetModel } from "@prisma/client";
+import { generateRandomComment } from "../utils/generateTweet";
 
 type Props = {
   tweet: TweetModel;
@@ -12,16 +13,17 @@ type Props = {
 
 const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
   const utils = trpc.useContext();
+
   const currentUserDetails = trpc.mongo.getUserFromSession.useQuery().data;
   const userDetails = trpc.mongo.getUser.useQuery({
     userId: tweet.userId,
   }).data;
+
   const likeTweetMutation = trpc.mongo.likeTweet.useMutation({
     onSuccess: async () => {
       await utils.mongo.getTweets.invalidate();
     },
   });
-
   const unlikeTweetMutation = trpc.mongo.unlikeTweet.useMutation({
     onSuccess: async () => {
       await utils.mongo.getTweets.invalidate();
@@ -31,13 +33,23 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
   const retweetMutation = trpc.mongo.postRetweet.useMutation({
     onSuccess: async () => {
       await utils.mongo.getTweets.invalidate();
-    }
+    },
   });
-
   const undoRetweetMutation = trpc.mongo.undoRetweet.useMutation({
     onSuccess: async () => {
       await utils.mongo.getTweets.invalidate();
-    }
+    },
+  });
+
+  const postCommentMutation = trpc.mongo.postComment.useMutation({
+    onSuccess: async () => {
+      await utils.mongo.getTweets.invalidate();
+    },
+  });
+  const deleteCommentMutation = trpc.mongo.deleteComment.useMutation({
+    onSuccess: async () => {
+      await utils.mongo.getTweets.invalidate();
+    },
   });
 
   const [isLiked, setIsLiked] = useState(isTweetLikedByCurrentUser());
@@ -52,8 +64,40 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
       return false;
     }
 
-    return tweet.retweetedUserIDs.includes(currentUserDetails?.id ?? "")
+    return tweet.retweetedUserIDs.includes(currentUserDetails?.id ?? "");
   }
+
+  function postComment() {
+    let generatedComment = "";
+    generateRandomComment(userDetails?.personality ?? "", tweet.tweet)
+      .then((generated) => {
+        if (generated?.data?.choices[0]?.text === undefined) {
+          throw new Error("Could not generate tweet");
+        }
+
+        let newComment: string | undefined = generated?.data?.choices[0]?.text;
+        if (newComment?.includes("\n")) {
+          const lastNewLine = newComment?.lastIndexOf("\n");
+          newComment = newComment?.substring(lastNewLine + 1);
+        }
+
+        generatedComment = newComment;
+      })
+      .catch((err) => {
+        console.error("Error generating comment", err);
+      });
+
+    postCommentMutation.mutate({
+      tweetId: tweet.id,
+      comment: generatedComment,
+    });
+  }
+
+  // function deleteComment() {
+  //     deleteCommentMutation.mutate({
+  //       
+  //       })
+  //   }
 
   function retweet() {
     if (!isRetweeted) {
@@ -101,16 +145,31 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
         <div className="text-sm">{tweet.tweet}</div>
         <div className="flex justify-between pt-2">
           <div className="flex items-center justify-center space-x-1">
-            <FaRegComment size={14} />
+            <FaRegComment size={14} onClick={postComment} />
             <p className="text-xs text-gray-800">{}</p>
           </div>
           <div className="flex items-center justify-center space-x-1">
-            {isLiked ? <FaHeart size={14} onClick={unlikeTweet} className="text-red-600" /> : <FaRegHeart size={14} onClick={likeTweet} />}
+            {isLiked ? (
+              <FaHeart
+                size={14}
+                onClick={unlikeTweet}
+                className="text-red-600"
+              />
+            ) : (
+              <FaRegHeart size={14} onClick={likeTweet} />
+            )}
             <p className="text-xs text-gray-800">{tweet.likes}</p>
           </div>
           <div className="flex items-center justify-center space-x-1">
-            <AiOutlineRetweet size={14} onClick={retweet} className={`text-xs ${isRetweeted ? "text-green-500 disable" : "text-gray-800"}`} />
-            <p className="text-xs text-gray-800">{tweet.retweetedUserIDs.length}</p>
+            <AiOutlineRetweet
+              size={14}
+              onClick={retweet}
+              className={`text-xs ${isRetweeted ? "disable text-green-500" : "text-gray-800"
+                }`}
+            />
+            <p className="text-xs text-gray-800">
+              {tweet.retweetedUserIDs.length}
+            </p>
           </div>
           <BsShare size={14} />
         </div>

@@ -71,9 +71,6 @@ const Feed: NextPage = () => {
     <div className="w-full overflow-x-hidden pb-16">
       {isMobileBreakpoint ? (
         <div className="z-0">
-          <div className="p-4">
-            <p className="text-xl font-semibold">Litter</p>
-          </div>
           <div className="flex flex-col-reverse space-y-2 pb-4">
             {tweets?.map((tweet, index) => (
               <Tweet key={index} tweet={tweet} />
@@ -90,7 +87,7 @@ const Feed: NextPage = () => {
       {isMobileBreakpoint && (
         <>
           <div
-            className={`fixed overflow-hidden top-0 left-0 flex h-full w-full transform flex-col items-center justify-center bg-black transition-all duration-200 ease-[cubic-bezier(.16,.48,.51,.9)] ${
+            className={`z-20 fixed overflow-hidden top-0 left-0 flex h-full w-full transform flex-col items-center justify-center bg-black transition-all duration-200 ease-[cubic-bezier(.16,.48,.51,.9)] ${
               isPostingTweet ? "translate-y-0" : "translate-y-full"
             } `}
           >
