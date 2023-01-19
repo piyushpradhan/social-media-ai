@@ -33,7 +33,6 @@ export const mongoRouter = createTRPCRouter({
       return ctx.prisma.tweet.create({
         data: {
           tweet: tweet,
-          likes: 0,
           user: {
             connect: {
               id: ctx.session.user.id,
@@ -89,13 +88,67 @@ export const mongoRouter = createTRPCRouter({
         }
       });
     }),
+  postComment: protectedProcedure
+    .input(z.object({ tweetId: z.string(), comment: z.string() }))
+    .mutation(async ({ input: { tweetId, comment }, ctx }) => {
+      const createdComment = await ctx.prisma.tweet.create({
+        data: {
+          tweet: comment,
+          user: {
+            connect: {
+              id: ctx.session.user.id,
+            },
+          },
+        },
+      });
+
+      return ctx.prisma.tweet.update({
+        where: {
+          id: tweetId,
+        },
+        data: {
+          commentCount: {
+            increment: 1
+          },
+          comments: {
+            connect: {
+              id: createdComment.id
+            }
+          }
+        }
+      })
+    }),
+  deleteComment: protectedProcedure
+    .input(z.object({ commentId: z.string(), tweetId: z.string() }))
+    .mutation(async ({ input: { tweetId, commentId }, ctx }) => {
+      await ctx.prisma.tweet.delete({
+        where: {
+          id: commentId
+        }
+      });
+
+      return ctx.prisma.tweet.update({
+        where: {
+          id: tweetId
+        },
+        data: {
+          commentCount: {
+            decrement: 1
+          },
+          comments: {
+            disconnect: {
+              id: commentId,
+            }
+          }
+        }
+      })
+    }),
   postRetweet: protectedProcedure
     .input(z.object({ tweetId: z.string(), tweet: z.string() }))
     .mutation(async ({ input: { tweet, tweetId }, ctx }) => {
       await ctx.prisma.tweet.create({
         data: {
           tweet: tweet,
-          likes: 0,
           user: {
             connect: {
               id: ctx.session.user.id,
@@ -108,6 +161,9 @@ export const mongoRouter = createTRPCRouter({
           id: tweetId
         },
         data: {
+          retweets: {
+            decrement: 1
+          },
           retweetedBy: {
             connect: {
               id: ctx.session.user.id
