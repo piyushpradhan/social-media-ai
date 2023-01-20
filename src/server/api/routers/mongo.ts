@@ -24,6 +24,15 @@ export const mongoRouter = createTRPCRouter({
         },
       });
     }),
+  getSingleTweet: publicProcedure
+    .input(z.object({ tweetId: z.string() }))
+    .query(({ input: { tweetId }, ctx }) => {
+      return ctx.prisma.tweet.findUnique({
+        where: {
+          id: tweetId,
+        },
+      });
+    }),
   getTweets: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.tweet.findMany({});
   }),
@@ -59,14 +68,14 @@ export const mongoRouter = createTRPCRouter({
         },
         data: {
           likes: {
-            increment: 1
+            increment: 1,
           },
           likedBy: {
             connect: {
               id: ctx.session.user.id,
-            }
-          }
-        }
+            },
+          },
+        },
       });
     }),
   unlikeTweet: protectedProcedure
@@ -78,14 +87,14 @@ export const mongoRouter = createTRPCRouter({
         },
         data: {
           likes: {
-            decrement: 1
+            decrement: 1,
           },
           likedBy: {
             disconnect: {
               id: ctx.session.user.id,
-            }
-          }
-        }
+            },
+          },
+        },
       });
     }),
   postComment: protectedProcedure
@@ -108,40 +117,40 @@ export const mongoRouter = createTRPCRouter({
         },
         data: {
           commentCount: {
-            increment: 1
+            increment: 1,
           },
           comments: {
             connect: {
-              id: createdComment.id
-            }
-          }
-        }
-      })
+              id: createdComment.id,
+            },
+          },
+        },
+      });
     }),
   deleteComment: protectedProcedure
     .input(z.object({ commentId: z.string(), tweetId: z.string() }))
     .mutation(async ({ input: { tweetId, commentId }, ctx }) => {
       await ctx.prisma.tweet.delete({
         where: {
-          id: commentId
-        }
+          id: commentId,
+        },
       });
 
       return ctx.prisma.tweet.update({
         where: {
-          id: tweetId
+          id: tweetId,
         },
         data: {
           commentCount: {
-            decrement: 1
+            decrement: 1,
           },
           comments: {
             disconnect: {
               id: commentId,
-            }
-          }
-        }
-      })
+            },
+          },
+        },
+      });
     }),
   postRetweet: protectedProcedure
     .input(z.object({ tweetId: z.string(), tweet: z.string() }))
@@ -158,18 +167,18 @@ export const mongoRouter = createTRPCRouter({
       });
       return ctx.prisma.tweet.update({
         where: {
-          id: tweetId
+          id: tweetId,
         },
         data: {
           retweets: {
-            decrement: 1
+            decrement: 1,
           },
           retweetedBy: {
             connect: {
-              id: ctx.session.user.id
-            }
-          }
-        }
+              id: ctx.session.user.id,
+            },
+          },
+        },
       });
     }),
   undoRetweet: protectedProcedure
@@ -177,21 +186,21 @@ export const mongoRouter = createTRPCRouter({
     .mutation(async ({ input: { tweetId, retweetId }, ctx }) => {
       await ctx.prisma.tweet.delete({
         where: {
-          id: retweetId
-        }
+          id: retweetId,
+        },
       });
 
       return ctx.prisma.tweet.update({
         where: {
-          id: tweetId
+          id: tweetId,
         },
         data: {
           retweetedBy: {
             disconnect: {
-              id: ctx.session.user.id
-            }
-          }
-        }
+              id: ctx.session.user.id,
+            },
+          },
+        },
       });
     }),
   getUserFromSession: protectedProcedure.query(({ ctx }) => {

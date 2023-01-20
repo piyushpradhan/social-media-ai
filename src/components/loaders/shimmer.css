@@ -1,0 +1,56 @@
+:root {
+  --mainColor: #FFE2E2;
+  --greyColor: #eeeeee; 
+  --greyDarkenColor: darken(--var(greyColor), 5);
+}
+
+body { 
+    margin: 0; 
+    background-color: var(mainColor); 
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    margin: 0 auto;
+    width: 380px;
+    padding: 16px;
+    border-radius: 4px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.item {
+    border: 8px solid #fff;
+}
+
+.rect {
+    height: 64px;
+    width: 64px;
+    
+    /* Clear fix */
+    border-right: 315px solid white;
+}
+
+.line {
+    height: 32px;
+}
+
+.pre {
+    background: linear-gradient(to right, var(greyColor) 8%, var(greyDarkenColor) 18%, var(greyColor) 33%);
+    background-size: 200% 50px;
+    animation: preloadAnimation 2s infinite;
+}
+
+
+@keyframes preloadAnimation {
+    from {
+        background-position: -280px 0
+    }
+    to {
+        background-position: 300px 0
+    }
+}
