@@ -4,8 +4,10 @@ import Image from "next/image";
 import { FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { BsThreeDots, BsShare } from "react-icons/bs";
+import { MdAccountCircle} from "react-icons/md";
 import type { Tweet as TweetModel } from "@prisma/client";
 import { generateRandomComment } from "../utils/generateTweet";
+
 import { useToggleContext } from "../hooks/context/toggleNewContext";
 import { useLoadingContext } from "../hooks/context/loadingContext";
 
@@ -185,13 +187,7 @@ const Tweet: React.FC<Props> = ({
       <div className="flex h-full w-full space-x-2">
         <div className="flex h-full items-start">
           <div className="relative h-12 w-12">
-            <Image
-              className="rounded-full"
-              src={userDetails?.image || ""}
-              loading="lazy"
-              fill={true}
-              alt="user profile"
-            />
+            {userDetails?.image  ? <Image className="rounded-full" src={userDetails?.image} loading="lazy" fill={true} alt="UserProfile" />: <MdAccountCircle className="h-full w-full text-black" />}
           </div>
         </div>
         <div className="flex flex-col">
