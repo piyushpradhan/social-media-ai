@@ -1,19 +1,23 @@
 import React from "react";
 import BottomNavBar from "./BottomNavBar";
 import useMediaQuery from "../hooks/mediaQuery";
+import { ToggleProvider } from "../hooks/context/toggleNewContext";
+import { LoadingProvider } from "../hooks/context/loadingContext";
 
 const Layout = ({ children }: { children: ReactElement }) => {
   const isBreakpoint = useMediaQuery(425);
 
-  // TODO: only display navbar if user is logged in
-
   return (
     <div>
-      <div className="p-4 fixed bg-white z-10 w-full border-b border-black">
+      <div className="fixed z-10 w-full border-b border-black bg-white p-4">
         <p className="text-xl font-semibold">Litter</p>
       </div>
       <div className="pt-14">
-        {children}
+        <LoadingProvider>
+          <ToggleProvider>
+          {children}
+          </ToggleProvider>
+        </LoadingProvider>
       </div>
       {isBreakpoint && <BottomNavBar />}
     </div>

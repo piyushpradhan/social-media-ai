@@ -94,10 +94,10 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
   }
 
   // function deleteComment() {
-  //     deleteCommentMutation.mutate({
-  //       
-  //       })
-  //   }
+  //   deleteCommentMutation.mutate({
+  //     
+  //     });
+  // }
 
   function retweet() {
     if (!isRetweeted) {
@@ -164,8 +164,9 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
             <AiOutlineRetweet
               size={14}
               onClick={retweet}
-              className={`text-xs ${isRetweeted ? "disable text-green-500" : "text-gray-800"
-                }`}
+              className={`text-xs ${
+                isRetweeted ? "disable text-green-500" : "text-gray-800"
+              }`}
             />
             <p className="text-xs text-gray-800">
               {tweet.retweetedUserIDs.length}
