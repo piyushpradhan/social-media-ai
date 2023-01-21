@@ -3,7 +3,6 @@ import { createNextApiHandler } from "@trpc/server/adapters/next";
 import { env } from "../../../env/server.mjs";
 import { createTRPCContext } from "../../../server/api/trpc";
 import { appRouter } from "../../../server/api/root";
-import { mongoRouter } from "../../../server/api/routers/example.js";
 
 // export API handler
 export default createNextApiHandler({
