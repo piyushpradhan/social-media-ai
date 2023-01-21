@@ -27,7 +27,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
   }
 
   return (
-    <div> 
+    <div>
       {appContext?.appState?.selectedTweet &&
         toggleContext?.isOpen?.isSingleTweetOpen &&
         userDetails && (
@@ -51,9 +51,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
         <div className="px-8 pt-14">
           <div className="grid h-full w-full grid-cols-5 gap-4 lg:grid-cols-7">
             <div className="col-span-1 h-full lg:col-span-2">
-            {userDetails && 
-              <SideNavBar userDetails={userDetails} />
-            }
+              {userDetails && <SideNavBar userDetails={userDetails} />}
             </div>
             <div className="col-span-3">{children}</div>
             <div className="col-span-1 lg:col-span-2"></div>

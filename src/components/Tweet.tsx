@@ -176,8 +176,8 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col items-center space-x-2 border-b border-black px-4 pt-4 pb-2">
-      <div className="flex w-full">
+    <div className="flex w-full flex-col items-center space-x-2 border-b border-black px-4 pt-4 pb-2">
+      <div className="flex w-full ">
         {tweet.commentId && (
           <p className="ml-3 flex pl-12 text-xs text-gray-500">
             <BiSubdirectoryRight className="text-sm" /> Replying to{" "}
