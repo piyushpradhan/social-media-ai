@@ -231,11 +231,20 @@ export const mongoRouter = createTRPCRouter({
       },
     });
   }),
-  getTweetsFromUser: protectedProcedure.query(({ ctx }) => {
+  getTweetsFromCurrentUser: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.tweet.findMany({
       where: {
         userId: ctx.session.user.id,
       },
     });
   }),
+  getTweetsFromUser: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(({ input: { id }, ctx }) => {
+      return ctx.prisma.tweet.findMany({
+        where: {
+          userId: id,
+        },
+      });
+    }),
 });

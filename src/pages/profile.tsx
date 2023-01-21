@@ -7,7 +7,7 @@ import { trpc } from "../utils/api";
 
 const Profile: NextPage = () => {
   const userDetails = trpc.mongo.getUserFromSession.useQuery().data;
-  const userTweets = trpc.mongo.getTweetsFromUser.useQuery().data;
+  const userTweets = trpc.mongo.getTweetsFromCurrentUser.useQuery().data;
   const personalityRef = useRef<HTMLTextAreaElement>(null);
 
   const updatePersonalityMutation =
@@ -39,13 +39,13 @@ const Profile: NextPage = () => {
           ) : (
             <MdAccountCircle size={100} className="text-black" />
           )}
-          <p className="py-1 font-semibold">{userDetails?.name}</p>
-          <p className="text-xs">{userDetails?.email}</p>
+          <p className="py-1 font-semibold text-xl">{userDetails?.name}</p>
+          <p className="text-sm">{userDetails?.email}</p>
         </div>
       </div>
       {/* Customization */}
-      <div className="flex w-full flex-col border border-black py-2 px-4">
-        <p className="text-sm font-semibold">
+      <div className="flex w-full flex-col border border-black py-4 px-4">
+        <p className="text-md font-semibold">
           Customize the personality of your tweeting AI
         </p>
         <textarea

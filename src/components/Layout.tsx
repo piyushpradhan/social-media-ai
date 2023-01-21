@@ -13,7 +13,7 @@ import { useAppContext } from "../hooks/context/appContext";
 import { useToggleContext } from "../hooks/context/toggleContext";
 
 const Layout = ({ children }: { children: ReactElement }) => {
-  const isMobileBreakpoint = useMediaQuery(425);
+  const isMobileBreakpoint = useMediaQuery(768);
   const router = useRouter();
   const modalContext = useModalContext();
   const appContext = useAppContext();

@@ -8,7 +8,7 @@ import { useLoadingContext } from "../hooks/context/loadingContext";
 import NewTweet from "../components/NewTweet";
 
 const Feed: NextPage = () => {
-  const isMobileBreakpoint = useMediaQuery(425);
+  const isMobileBreakpoint = useMediaQuery(768);
   const tweetsResponse = trpc.mongo.getTweets.useQuery().data;
   const userDetails = trpc.mongo.getUserFromSession.useQuery().data;
   const [tweets, setTweets] = useState<TweetModel[]>([]);
