@@ -9,6 +9,7 @@ import Layout from "../components/Layout";
 import { ModalProvider } from "../hooks/context/modalContext";
 import { LoadingProvider } from "../hooks/context/loadingContext";
 import { AppProvider } from "../hooks/context/appContext";
+import { ToggleProvider } from "../hooks/context/toggleContext";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -18,9 +19,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <ModalProvider>
         <AppProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <LoadingProvider>
+            <ToggleProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </ToggleProvider>
+          </LoadingProvider>
         </AppProvider>
       </ModalProvider>
     </SessionProvider>

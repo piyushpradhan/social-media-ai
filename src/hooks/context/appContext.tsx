@@ -12,6 +12,7 @@ type AppContextType = {
   appState: AppStateType;
   setGeneratedTweet: (tweet: string) => void;
   setGeneratedComment: (comment: string) => void;
+  setSelectedTweet: (tweet: Tweet) => void;
 };
 
 type AppComponentProps = {
@@ -43,9 +44,21 @@ export function AppProvider({ children }: AppComponentProps) {
     });
   }
 
+  function setSelectedTweet(tweet: Tweet) {
+    setAppState({
+      ...appState,
+      selectedTweet: tweet,
+    });
+  }
+
   return (
     <AppContext.Provider
-      value={{ appState, setGeneratedTweet, setGeneratedComment }}
+      value={{
+        appState,
+        setGeneratedTweet,
+        setGeneratedComment,
+        setSelectedTweet,
+      }}
     >
       {children}
     </AppContext.Provider>

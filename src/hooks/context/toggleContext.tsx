@@ -3,6 +3,7 @@ import { createContext, ReactNode, useContext, useState } from "react";
 type ToggleStateType = {
   isNewTweetOpen: boolean;
   isNewCommentOpen: boolean;
+  isSingleTweetOpen: boolean;
 };
 
 type ToggleContextType = {
@@ -10,6 +11,7 @@ type ToggleContextType = {
   toggleNewTweet: () => void;
   closeNewTweet: () => void;
   toggleNewComment: () => void;
+  toggleSingleTweet: (value: boolean) => void;
 };
 
 type ToggleComponentPropsType = {
@@ -19,6 +21,7 @@ type ToggleComponentPropsType = {
 const initialState: ToggleStateType = {
   isNewTweetOpen: false,
   isNewCommentOpen: false,
+  isSingleTweetOpen: false,
 };
 
 const ToggleContext = createContext<ToggleContextType | null>(null);
@@ -28,6 +31,7 @@ export function ToggleProvider({ children }: { children: ReactNode }) {
 
   function toggleNewTweet() {
     setIsOpen({
+      ...isOpen,
       isNewTweetOpen: !isOpen.isNewTweetOpen,
       isNewCommentOpen: isOpen.isNewCommentOpen
         ? false
@@ -37,6 +41,7 @@ export function ToggleProvider({ children }: { children: ReactNode }) {
 
   function closeNewTweet() {
     setIsOpen({
+      ...isOpen,
       isNewTweetOpen: false,
       isNewCommentOpen: false,
     });
@@ -44,8 +49,16 @@ export function ToggleProvider({ children }: { children: ReactNode }) {
 
   function toggleNewComment() {
     setIsOpen({
+      ...isOpen,
       isNewTweetOpen: isOpen.isNewTweetOpen ? false : isOpen.isNewTweetOpen,
       isNewCommentOpen: !isOpen.isNewCommentOpen,
+    });
+  }
+
+  function toggleSingleTweet(value: boolean) {
+    setIsOpen({
+      ...isOpen,
+      isSingleTweetOpen: value ?? !isOpen.isSingleTweetOpen,
     });
   }
 
@@ -56,6 +69,7 @@ export function ToggleProvider({ children }: { children: ReactNode }) {
         toggleNewTweet,
         closeNewTweet,
         toggleNewComment,
+        toggleSingleTweet,
       }}
     >
       {children}

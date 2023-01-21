@@ -39,9 +39,6 @@ const Feed: NextPage = () => {
           </div>
         </>
       )}
-      {isMobileBreakpoint && userDetails && (
-        <NewTweet userDetails={userDetails} />
-      )}
     </div>
   );
 };

@@ -7,9 +7,10 @@ import { BsThreeDots, BsShare } from "react-icons/bs";
 import { MdAccountCircle } from "react-icons/md";
 import type { Tweet as TweetModel } from "@prisma/client";
 
-import { useToggleContext } from "../hooks/context/toggleNewContext";
+import { useToggleContext } from "../hooks/context/toggleContext";
 import { useLoadingContext } from "../hooks/context/loadingContext";
 import { useAppContext } from "../hooks/context/appContext";
+import { generateRandomComment } from "../utils/generateTweet";
 
 type Props = {
   tweet: TweetModel;
@@ -124,33 +125,35 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
         "Just COMMENT finished up a project using #Type script - so much fi andDefinitely the way to go for large scale applications. #jsdevs" +
           random.toString()
       );
+      console.log("COMMENT GENERATED", appContext?.appState.generatedComment);
       loadingContext?.toggleTweetLoading?.(false);
     }, 600);
 
-    //   generateRandomComment(
-    //     userDetails?.personality ?? "",
-    //     selectedTweet?.tweet ?? ""
-    //   )
-    //     .then((generated) => {
-    //       if (generated?.data?.choices[0]?.text === undefined) {
-    //         throw new Error("Could not generate tweet");
-    //       }
-    //       let newComment: string | undefined =
-    //         generated?.data?.choices?.at(0)?.text;
-    //       if (newComment?.includes("\n")) {
-    //         const lastNewLine = newComment?.lastIndexOf("\n");
-    //         newComment = newComment?.substring(lastNewLine + 1);
-    //       }
+    // generateRandomComment(
+    //   userDetails?.personality ?? "",
+    //   tweet.tweet
+    // )
+    //   .then((generated) => {
+    //     if (generated?.data?.choices[0]?.text === undefined) {
+    //       throw new Error("Could not generate tweet");
+    //     }
+    //     let newComment: string | undefined =
+    //       generated?.data?.choices?.at(0)?.text;
+    //     if (newComment?.includes("\n")) {
+    //       const lastNewLine = newComment?.lastIndexOf("\n");
+    //       newComment = newComment?.substring(lastNewLine + 1);
+    //     }
 
-    //       appContext?.setGeneratedComment(newComment ?? "");
-    //       loadingContext?.toggleTweetLoading(false);
-    //     })
-    //     .catch((err) => {
-    //       console.log("Error generating tweet", err);
-    //     });
+    //     appContext?.setGeneratedComment(newComment ?? "");
+    //     loadingContext?.toggleTweetLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     console.log("Error generating tweet", err);
+    //   });
   }
 
   function generateComment() {
+    appContext?.setSelectedTweet(tweet);
     toggleContext?.toggleNewComment();
     fetchComment();
   }

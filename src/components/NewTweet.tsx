@@ -1,5 +1,5 @@
 import React from "react";
-import { useToggleContext } from "../hooks/context/toggleNewContext";
+import { useToggleContext } from "../hooks/context/toggleContext";
 import { useLoadingContext } from "../hooks/context/loadingContext";
 import { RxCross2 } from "react-icons/rx";
 import {
@@ -61,40 +61,6 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
 
   function fetchTweet() {
     toggleTweetLoading?.(true);
-
-    if (isOpen?.isNewCommentOpen) {
-      const random = Math.floor(Math.random() * 100);
-      setTimeout(() => {
-        setGeneratedComment?.(
-          "Just COMMENT finished up a project using #Type script - so much fi andDefinitely the way to go for large scale applications. #jsdevs" +
-            random.toString()
-        );
-        toggleTweetLoading?.(false);
-      }, 600);
-
-      //   generateRandomComment(
-      //     userDetails?.personality ?? "",
-      //     selectedTweet?.tweet ?? ""
-      //   )
-      //     .then((generated) => {
-      //       if (generated?.data?.choices[0]?.text === undefined) {
-      //         throw new Error("Could not generate tweet");
-      //       }
-      //       let newComment: string | undefined =
-      //         generated?.data?.choices?.at(0)?.text;
-      //       if (newComment?.includes("\n")) {
-      //         const lastNewLine = newComment?.lastIndexOf("\n");
-      //         newComment = newComment?.substring(lastNewLine + 1);
-      //       }
-
-      //       setGeneratedComment?.(newComment ?? "");
-      //       toggleTweetLoading?.(false);
-      //     })
-      //     .catch((err) => {
-      //       console.log("Error generating tweet", err);
-      //     });
-      return;
-    }
 
     const random = Math.floor(Math.random() * 100);
     setTimeout(() => {
