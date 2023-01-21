@@ -27,15 +27,15 @@ const Feed: NextPage = () => {
     <div className="w-full overflow-x-hidden pb-16">
       {isMobileBreakpoint ? (
         <div className="z-0">
-          <div className="flex h-screen flex-col-reverse space-y-2 overflow-y-auto pb-6">
-            {tweets?.map((tweet, index) => (
+          <div className="flex h-screen flex-col space-y-2 overflow-y-auto pb-6">
+            {tweets?.reverse().map((tweet, index) => (
               <Tweet key={index} tweet={tweet} />
             ))}
           </div>
         </div>
       ) : (
         <div className="flex h-screen flex-col items-center overflow-y-auto pb-16">
-          {tweets.map((tweet) => (
+          {tweets.reverse().map((tweet) => (
             <div key={tweet.id} className="w-full max-w-3xl">
               <Tweet tweet={tweet} />
             </div>
