@@ -46,14 +46,16 @@ const Layout = ({ children }: { children: ReactElement }) => {
         )}
       </div>
       {isMobileBreakpoint ? (
-        <div className="pt-14">{children}</div>
+        <div className="h-screen overflow-y-auto pt-14 pb-24">{children}</div>
       ) : (
-        <div className="px-8 pt-14">
+        <div className="px-8 pt-14 pb-48">
           <div className="grid h-full w-full grid-cols-5 gap-4 lg:grid-cols-7">
             <div className="col-span-1 h-full lg:col-span-2">
               {userDetails && <SideNavBar userDetails={userDetails} />}
             </div>
-            <div className="col-span-3">{children}</div>
+            <div className="col-span-3 h-screen overflow-y-auto pb-16">
+              {children}
+            </div>
             <div className="col-span-1 lg:col-span-2"></div>
           </div>
         </div>

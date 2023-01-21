@@ -1,12 +1,12 @@
 import type { User } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
+import type { ReactNode } from "react";
 import { useAppContext } from "../hooks/context/appContext";
-import {
-  useLoadingContext,
-} from "../hooks/context/loadingContext";
+import { useLoadingContext } from "../hooks/context/loadingContext";
 import { useToggleContext } from "../hooks/context/toggleContext";
 import { generateRandomTweet } from "../utils/generateTweet";
+import useMediaQuery from "../hooks/mediaQuery";
 
 type Props = {
   label: string;
@@ -14,6 +14,7 @@ type Props = {
   isActive?: boolean;
   link?: string;
   userDetails?: User;
+  icon: ReactNode;
 };
 
 const SideNavBarButton: React.FC<Props> = ({
@@ -22,11 +23,13 @@ const SideNavBarButton: React.FC<Props> = ({
   isYeet = false,
   link = "",
   userDetails,
+  icon,
 }: Props) => {
   const router = useRouter();
   const toggleContext = useToggleContext();
   const loadingContext = useLoadingContext();
   const appContext = useAppContext();
+  const navBarBreakpoint = useMediaQuery(1024);
 
   function fetchTweet() {
     loadingContext?.toggleTweetLoading(true);
@@ -79,15 +82,18 @@ const SideNavBarButton: React.FC<Props> = ({
   return (
     <button
       onClick={handleClick}
-      className={`w-64 py-2 px-4 text-xl transition-all duration-200 ${
-        isActive ? "font-bold" : ""
-      } ${
+      className={`${
+        navBarBreakpoint ? "w-12 p-2" : "w-64 py-2 px-4"
+      } text-xl transition-all duration-200 ${isActive ? "font-bold" : ""} ${
         isYeet
           ? "rounded-md border-2 border-black bg-black font-bold text-white hover:bg-white hover:text-black"
           : "rounded-full bg-white text-black hover:bg-gray-200/50 hover:text-black"
       }`}
     >
-      {label}
+      <div className="flex w-full items-center justify-center space-x-4">
+        <div>{icon}</div>
+        {!navBarBreakpoint && <div>{label}</div>}
+      </div>
     </button>
   );
 };
