@@ -2,10 +2,7 @@ import React from "react";
 import { useToggleContext } from "../hooks/context/toggleContext";
 import { useLoadingContext } from "../hooks/context/loadingContext";
 import { RxCross2 } from "react-icons/rx";
-import {
-  generateRandomComment,
-  generateRandomTweet,
-} from "../utils/generateTweet";
+import { generateRandomTweet } from "../utils/generateTweet";
 import type { User } from "@prisma/client";
 import { useAppContext } from "../hooks/context/appContext";
 import { GoCheck } from "react-icons/go";
@@ -22,7 +19,7 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
 
   const { isOpen, toggleNewComment, toggleNewTweet, closeNewTweet } =
     toggleContext || {};
-  const { appState, setGeneratedComment, setGeneratedTweet } = appContext || {};
+  const { appState, setGeneratedTweet } = appContext || {};
   const { toggleTweetLoading, loading } = loadingContext || {};
   const { generatedTweet, generatedComment, selectedTweet } = appState || {};
 

@@ -28,8 +28,12 @@ const Layout = ({ children }: { children: ReactElement }) => {
   return (
     <div>
       {appContext?.appState?.selectedTweet &&
-        toggleContext?.isOpen?.isSingleTweetOpen && (
-          <SingleTweet tweet={appContext?.appState?.selectedTweet} />
+        toggleContext?.isOpen?.isSingleTweetOpen &&
+        userDetails && (
+          <SingleTweet
+            tweet={appContext?.appState?.selectedTweet}
+            userDetails={userDetails}
+          />
         )}
       {isMobileBreakpoint && userDetails && (
         <NewTweet userDetails={userDetails} />

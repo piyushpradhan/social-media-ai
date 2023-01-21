@@ -48,6 +48,15 @@ export const mongoRouter = createTRPCRouter({
   getTweets: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.tweet.findMany({});
   }),
+  getComments: publicProcedure
+    .input(z.object({ tweetId: z.string() }))
+    .query(({ input: { tweetId }, ctx }) => {
+      return ctx.prisma.tweet.findMany({
+        where: {
+          commentId: tweetId,
+        },
+      });
+    }),
   postTweet: protectedProcedure
     .input(z.object({ tweet: z.string() }))
     .mutation(({ input: { tweet }, ctx }) => {

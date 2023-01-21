@@ -11,6 +11,7 @@ import { useToggleContext } from "../hooks/context/toggleContext";
 import { useLoadingContext } from "../hooks/context/loadingContext";
 import { useAppContext } from "../hooks/context/appContext";
 import { generateRandomComment } from "../utils/generateTweet";
+import { BiSubdirectoryRight } from "react-icons/bi";
 
 type Props = {
   tweet: TweetModel;
@@ -159,26 +160,23 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
   }
 
   function openSingleTweet() {
-    // if (tweet.commentId) {
-    //   return;
-    // }
     appContext?.setSelectedTweet(tweet);
     toggleContext?.toggleSingleTweet(true);
   }
 
   return (
-    <div className="flex h-full w-full flex-col items-center space-x-2 border-b border-black py-2 px-4">
+    <div className="flex h-full w-full flex-col items-center space-x-2 border-b border-black py-2">
       <div className="flex w-full">
         {tweet.commentId && (
-          <p className="ml-3 pl-12 text-xs text-gray-500">
-            Replying to{" "}
+          <p className="flex pl-16 text-xs text-gray-500">
+            <BiSubdirectoryRight className="text-sm" /> Replying to{" "}
             <span className="font-medium">{commentUserDetails?.name}</span>
           </p>
         )}
       </div>
       <div className="flex h-full w-full space-x-2">
         <div className="flex h-full items-start">
-          <div className="relative h-12 w-12">
+          <div className="relative h-16 w-16">
             {userDetails?.image ? (
               <Image
                 className="rounded-full"
@@ -186,6 +184,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
                 loading="lazy"
                 fill={true}
                 alt="UserProfile"
+                sizes="100%"
               />
             ) : (
               <MdAccountCircle className="h-full w-full text-black" />
@@ -193,8 +192,8 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
           </div>
         </div>
         <div className="flex flex-col">
-          <p className="text-md font-semibold">{userDetails?.name}</p>
-          <div className="text-sm" onClick={openSingleTweet}>
+          <p className="text-xl font-semibold">{userDetails?.name}</p>
+          <div className="text-md" onClick={openSingleTweet}>
             {tweet.tweet}
           </div>
           <div className="flex justify-between pt-2">
@@ -229,7 +228,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
             <BsShare size={14} />
           </div>
         </div>
-        <div className="flex h-full items-start pr-1">
+        <div className="flex h-full items-start pr-2">
           <BsThreeDots size={12} />
         </div>
       </div>
