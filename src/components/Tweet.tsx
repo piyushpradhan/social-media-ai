@@ -6,11 +6,13 @@ import { AiOutlineRetweet } from "react-icons/ai";
 import { BsThreeDots, BsShare } from "react-icons/bs";
 import { MdAccountCircle } from "react-icons/md";
 import type { Tweet as TweetModel } from "@prisma/client";
+import { BiSubdirectoryRight } from "react-icons/bi";
 
 import { useToggleContext } from "../hooks/context/toggleContext";
 import { useLoadingContext } from "../hooks/context/loadingContext";
 import { useAppContext } from "../hooks/context/appContext";
 import { generateRandomComment } from "../utils/generateTweet";
+import { useRouter } from "next/router";
 
 type Props = {
   tweet: TweetModel;
@@ -18,6 +20,7 @@ type Props = {
 
 const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
   const utils = trpc.useContext();
+  const router = useRouter();
 
   const toggleContext = useToggleContext();
   const loadingContext = useLoadingContext();
@@ -119,37 +122,34 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
 
   function fetchComment() {
     loadingContext?.toggleTweetLoading(true);
-    const random = Math.floor(Math.random() * 100);
-    setTimeout(() => {
-      appContext?.setGeneratedComment(
-        "Just COMMENT finished up a project using #Type script - so much fi andDefinitely the way to go for large scale applications. #jsdevs" +
-          random.toString()
-      );
-      console.log("COMMENT GENERATED", appContext?.appState.generatedComment);
-      loadingContext?.toggleTweetLoading?.(false);
-    }, 600);
+    // const random = Math.floor(Math.random() * 100);
+    // setTimeout(() => {
+    //   appContext?.setGeneratedComment(
+    //     "Just COMMENT finished up a project using #Type script - so much fi andDefinitely the way to go for large scale applications. #jsdevs" +
+    //       random.toString()
+    //   );
+    //   console.log("COMMENT GENERATED", appContext?.appState.generatedComment);
+    //   loadingContext?.toggleTweetLoading?.(false);
+    // }, 600);
 
-    // generateRandomComment(
-    //   userDetails?.personality ?? "",
-    //   tweet.tweet
-    // )
-    //   .then((generated) => {
-    //     if (generated?.data?.choices[0]?.text === undefined) {
-    //       throw new Error("Could not generate tweet");
-    //     }
-    //     let newComment: string | undefined =
-    //       generated?.data?.choices?.at(0)?.text;
-    //     if (newComment?.includes("\n")) {
-    //       const lastNewLine = newComment?.lastIndexOf("\n");
-    //       newComment = newComment?.substring(lastNewLine + 1);
-    //     }
+    generateRandomComment(userDetails?.personality ?? "", tweet.tweet)
+      .then((generated) => {
+        if (generated?.data?.choices[0]?.text === undefined) {
+          throw new Error("Could not generate tweet");
+        }
+        let newComment: string | undefined =
+          generated?.data?.choices?.at(0)?.text;
+        if (newComment?.includes("\n")) {
+          const lastNewLine = newComment?.lastIndexOf("\n");
+          newComment = newComment?.substring(lastNewLine + 1);
+        }
 
-    //     appContext?.setGeneratedComment(newComment ?? "");
-    //     loadingContext?.toggleTweetLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     console.log("Error generating tweet", err);
-    //   });
+        appContext?.setGeneratedComment(newComment ?? "");
+        loadingContext?.toggleTweetLoading(false);
+      })
+      .catch((err) => {
+        console.log("Error generating tweet", err);
+      });
   }
 
   function generateComment() {
@@ -166,12 +166,21 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
     toggleContext?.toggleSingleTweet(true);
   }
 
+  function navigateToProfile() {
+    router
+      .push(`/profile/${userDetails?.id ?? ""}`)
+      .then(() => {
+        `Navigated to ${userDetails?.name ?? ""}'s profile`;
+      })
+      .catch((err: any) => console.error(err));
+  }
+
   return (
-    <div className="flex h-full w-full flex-col items-center space-x-2 border-b border-black py-2 px-4">
+    <div className="flex h-full w-full flex-col items-center space-x-2 border-b border-black px-4 pt-4 pb-2">
       <div className="flex w-full">
         {tweet.commentId && (
-          <p className="ml-3 pl-12 text-xs text-gray-500">
-            Replying to{" "}
+          <p className="ml-3 flex pl-12 text-xs text-gray-500">
+            <BiSubdirectoryRight className="text-sm" /> Replying to{" "}
             <span className="font-medium">{commentUserDetails?.name}</span>
           </p>
         )}
@@ -192,14 +201,23 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
             )}
           </div>
         </div>
-        <div className="flex flex-col">
-          <p className="text-md font-semibold">{userDetails?.name}</p>
-          <div className="text-sm" onClick={openSingleTweet}>
+        <div className="flex flex-col w-full">
+          <p
+            className="text-md cursor-pointer font-semibold"
+            onClick={navigateToProfile}
+          >
+            {userDetails?.name}
+          </p>
+          <div className="cursor-pointer text-sm" onClick={openSingleTweet}>
             {tweet.tweet}
           </div>
           <div className="flex justify-between pt-2">
             <div className="flex items-center justify-center space-x-1">
-              <FaRegComment size={14} onClick={generateComment} />
+              <FaRegComment
+                className="cursor-pointer"
+                size={14}
+                onClick={generateComment}
+              />
               <p className="text-xs text-gray-800">{tweet.commentCount}</p>
             </div>
             <div className="flex items-center justify-center space-x-1">
@@ -207,10 +225,14 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
                 <FaHeart
                   size={14}
                   onClick={unlikeTweet}
-                  className="text-red-600"
+                  className="cursor-pointer text-red-600"
                 />
               ) : (
-                <FaRegHeart size={14} onClick={likeTweet} />
+                <FaRegHeart
+                  size={14}
+                  onClick={likeTweet}
+                  className="cursor-pointer"
+                />
               )}
               <p className="text-xs text-gray-800">{tweet.likes}</p>
             </div>
@@ -218,7 +240,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
               <AiOutlineRetweet
                 size={14}
                 onClick={retweet}
-                className={`text-xs ${
+                className={`cursor-pointer text-xs ${
                   isRetweeted ? "disable text-green-500" : "text-gray-800"
                 }`}
               />
@@ -229,8 +251,8 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
             <BsShare size={14} />
           </div>
         </div>
-        <div className="flex h-full items-start pr-1">
-          <BsThreeDots size={12} />
+        <div className="relative flex h-full items-start pr-1">
+          <BsThreeDots size={12} className="cursor-pointer" />
         </div>
       </div>
     </div>

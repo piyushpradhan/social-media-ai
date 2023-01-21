@@ -1,14 +1,11 @@
-import { TweetModel } from "@prisma/client";
+import type { Tweet as TweetModel } from "@prisma/client";
 import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useRef, useState, useEffect } from "react";
 import { MdAccountCircle } from "react-icons/md";
 import Tweet from "../../components/Tweet";
-import {
-  LoadingContext,
-  useLoadingContext,
-} from "../../hooks/context/loadingContext";
+import { useLoadingContext } from "../../hooks/context/loadingContext";
 import { trpc } from "../../utils/api";
 
 const UserProfile: NextPage = () => {
@@ -47,8 +44,8 @@ const UserProfile: NextPage = () => {
   }
 
   return (
-    <div className="flex w-full flex-col space-y-2 p-2">
-      <div className="h-full">
+    <div className="flex h-screen w-full flex-col space-y-2 overflow-y-auto p-2">
+      <div className="">
         <div className="flex flex-col items-center border border-black py-4">
           {userDetails?.image ? (
             <Image

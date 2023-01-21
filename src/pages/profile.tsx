@@ -24,8 +24,8 @@ const Profile: NextPage = () => {
   }
 
   return (
-    <div className="flex w-full flex-col space-y-2 p-2">
-      <div className="h-full">
+    <div className="flex w-full flex-col space-y-2 p-2 h-screen overflow-y-auto">
+      <div className="">
         <div className="flex flex-col items-center border border-black py-4">
           {userDetails?.image ? (
             <Image

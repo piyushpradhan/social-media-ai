@@ -12,6 +12,7 @@ import { useLoadingContext } from "../hooks/context/loadingContext";
 import { useAppContext } from "../hooks/context/appContext";
 import { generateRandomComment } from "../utils/generateTweet";
 import { BiSubdirectoryRight } from "react-icons/bi";
+import { useRouter } from "next/router";
 
 type Props = {
   tweet: TweetModel;
@@ -19,6 +20,7 @@ type Props = {
 
 const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
   const utils = trpc.useContext();
+  const router = useRouter();
 
   const toggleContext = useToggleContext();
   const loadingContext = useLoadingContext();
@@ -120,37 +122,37 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
 
   function fetchComment() {
     loadingContext?.toggleTweetLoading(true);
-    const random = Math.floor(Math.random() * 100);
-    setTimeout(() => {
-      appContext?.setGeneratedComment(
-        "Just COMMENT finished up a project using #Type script - so much fi andDefinitely the way to go for large scale applications. #jsdevs" +
-          random.toString()
-      );
-      console.log("COMMENT GENERATED", appContext?.appState.generatedComment);
-      loadingContext?.toggleTweetLoading?.(false);
-    }, 600);
+    // const random = Math.floor(Math.random() * 100);
+    // setTimeout(() => {
+    //   appContext?.setGeneratedComment(
+    //     "Just COMMENT finished up a project using #Type script - so much fi andDefinitely the way to go for large scale applications. #jsdevs" +
+    //       random.toString()
+    //   );
+    //   console.log("COMMENT GENERATED", appContext?.appState.generatedComment);
+    //   loadingContext?.toggleTweetLoading?.(false);
+    // }, 600);
 
-    // generateRandomComment(
-    //   userDetails?.personality ?? "",
-    //   tweet.tweet
-    // )
-    //   .then((generated) => {
-    //     if (generated?.data?.choices[0]?.text === undefined) {
-    //       throw new Error("Could not generate tweet");
-    //     }
-    //     let newComment: string | undefined =
-    //       generated?.data?.choices?.at(0)?.text;
-    //     if (newComment?.includes("\n")) {
-    //       const lastNewLine = newComment?.lastIndexOf("\n");
-    //       newComment = newComment?.substring(lastNewLine + 1);
-    //     }
+    generateRandomComment(
+      userDetails?.personality ?? "",
+      tweet.tweet
+    )
+      .then((generated) => {
+        if (generated?.data?.choices[0]?.text === undefined) {
+          throw new Error("Could not generate tweet");
+        }
+        let newComment: string | undefined =
+          generated?.data?.choices?.at(0)?.text;
+        if (newComment?.includes("\n")) {
+          const lastNewLine = newComment?.lastIndexOf("\n");
+          newComment = newComment?.substring(lastNewLine + 1);
+        }
 
-    //     appContext?.setGeneratedComment(newComment ?? "");
-    //     loadingContext?.toggleTweetLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     console.log("Error generating tweet", err);
-    //   });
+        appContext?.setGeneratedComment(newComment ?? "");
+        loadingContext?.toggleTweetLoading(false);
+      })
+      .catch((err) => {
+        console.log("Error generating tweet", err);
+      });
   }
 
   function generateComment() {
@@ -164,8 +166,17 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
     toggleContext?.toggleSingleTweet(true);
   }
 
+  function navigateToProfile() {
+    router
+      .push(`/profile/${userDetails?.id ?? ""}`)
+      .then(() => {
+        `Navigated to ${userDetails?.name ?? ""}'s profile`;
+      })
+      .catch((err: any) => console.error(err));
+  }
+
   return (
-    <div className="flex h-full w-full flex-col items-center space-x-2 border-b border-black py-2">
+    <div className="flex h-full w-full max-w-3xl flex-col items-center space-x-2 border-b border-black py-2">
       <div className="flex w-full">
         {tweet.commentId && (
           <p className="flex pl-16 text-xs text-gray-500">
@@ -192,13 +203,18 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
           </div>
         </div>
         <div className="flex flex-col">
-          <p className="text-xl font-semibold">{userDetails?.name}</p>
+          <p
+            className="cursor-pointer text-xl font-semibold"
+            onClick={navigateToProfile}
+          >
+            {userDetails?.name}
+          </p>
           <div className="text-md" onClick={openSingleTweet}>
             {tweet.tweet}
           </div>
           <div className="flex justify-between pt-2">
             <div className="flex items-center justify-center space-x-1">
-              <FaRegComment size={14} onClick={generateComment} />
+              <FaRegComment className="cursor-pointer" size={14} onClick={generateComment} />
               <p className="text-xs text-gray-800">{tweet.commentCount}</p>
             </div>
             <div className="flex items-center justify-center space-x-1">
@@ -206,10 +222,10 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
                 <FaHeart
                   size={14}
                   onClick={unlikeTweet}
-                  className="text-red-600"
+                  className="text-red-600 cursor-pointer"
                 />
               ) : (
-                <FaRegHeart size={14} onClick={likeTweet} />
+                <FaRegHeart size={14} onClick={likeTweet} className="cursor-pointer" />
               )}
               <p className="text-xs text-gray-800">{tweet.likes}</p>
             </div>
@@ -217,7 +233,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
               <AiOutlineRetweet
                 size={14}
                 onClick={retweet}
-                className={`text-xs ${
+                className={`text-xs cursor-pointer ${
                   isRetweeted ? "disable text-green-500" : "text-gray-800"
                 }`}
               />
@@ -229,7 +245,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
           </div>
         </div>
         <div className="flex h-full items-start pr-2">
-          <BsThreeDots size={12} />
+          <BsThreeDots size={12} className="cursor-pointer"/>
         </div>
       </div>
     </div>
