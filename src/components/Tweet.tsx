@@ -4,44 +4,23 @@ import Image from "next/image";
 import { FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { BsThreeDots, BsShare } from "react-icons/bs";
-import { MdAccountCircle} from "react-icons/md";
+import { MdAccountCircle } from "react-icons/md";
 import type { Tweet as TweetModel } from "@prisma/client";
-import { generateRandomComment } from "../utils/generateTweet";
 
 import { useToggleContext } from "../hooks/context/toggleNewContext";
 import { useLoadingContext } from "../hooks/context/loadingContext";
+import { useAppContext } from "../hooks/context/appContext";
 
 type Props = {
   tweet: TweetModel;
-  setSelectedTweet: ({
-    tweetId,
-    tweet,
-  }: {
-    tweetId: string;
-    tweet: string;
-  }) => void;
-  setGeneratedTweet: (value: string) => void;
 };
 
-const Tweet: React.FC<Props> = ({
-  tweet,
-  setSelectedTweet,
-  setGeneratedTweet,
-}: {
-  tweet: TweetModel;
-  setSelectedTweet: ({
-    tweetId,
-    tweet,
-  }: {
-    tweetId: string;
-    tweet: string;
-  }) => void;
-  setGeneratedTweet: (value: string) => void;
-}) => {
+const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
   const utils = trpc.useContext();
 
   const toggleContext = useToggleContext();
   const loadingContext = useLoadingContext();
+  const appContext = useAppContext();
 
   const currentUserDetails = trpc.mongo.getUserFromSession.useQuery().data;
   const userDetails = trpc.mongo.getUser.useQuery({
@@ -139,35 +118,36 @@ const Tweet: React.FC<Props> = ({
 
   function fetchComment() {
     loadingContext?.toggleTweetLoading(true);
-    // const random = Math.floor(Math.random() * 100);
-    // setTimeout(() => {
-    //   setGeneratedTweet(
-    //     "Just COMMENT finished up a project using #Type script - so much fi andDefinitely the way to go for large scale applications. #jsdevs" +
-    //       random.toString()
-    //   );
-    //   loadingContext?.toggleTweetLoading(false);
-    //   setSelectedTweet({ tweetId: tweet.id, tweet: tweet.tweet });
-    // }, 600);
+    const random = Math.floor(Math.random() * 100);
+    setTimeout(() => {
+      appContext?.setGeneratedComment(
+        "Just COMMENT finished up a project using #Type script - so much fi andDefinitely the way to go for large scale applications. #jsdevs" +
+          random.toString()
+      );
+      loadingContext?.toggleTweetLoading?.(false);
+    }, 600);
 
-    generateRandomComment(userDetails?.personality || "", tweet.tweet)
-      .then((generated) => {
-        if (generated?.data?.choices[0]?.text === undefined) {
-          throw new Error("Could not generate tweet");
-        }
-        let newComment: string | undefined =
-          generated?.data?.choices?.at(0)?.text;
-        if (newComment?.includes("\n")) {
-          const lastNewLine = newComment?.lastIndexOf("\n");
-          newComment = newComment?.substring(lastNewLine + 1);
-        }
+    //   generateRandomComment(
+    //     userDetails?.personality ?? "",
+    //     selectedTweet?.tweet ?? ""
+    //   )
+    //     .then((generated) => {
+    //       if (generated?.data?.choices[0]?.text === undefined) {
+    //         throw new Error("Could not generate tweet");
+    //       }
+    //       let newComment: string | undefined =
+    //         generated?.data?.choices?.at(0)?.text;
+    //       if (newComment?.includes("\n")) {
+    //         const lastNewLine = newComment?.lastIndexOf("\n");
+    //         newComment = newComment?.substring(lastNewLine + 1);
+    //       }
 
-        setSelectedTweet({ tweetId: tweet.id, tweet: tweet.tweet });
-        setGeneratedTweet(newComment || "");
-        loadingContext?.toggleTweetLoading(false);
-      })
-      .catch((err) => {
-        console.log("Error generating tweet", err);
-      });
+    //       appContext?.setGeneratedComment(newComment ?? "");
+    //       loadingContext?.toggleTweetLoading(false);
+    //     })
+    //     .catch((err) => {
+    //       console.log("Error generating tweet", err);
+    //     });
   }
 
   function generateComment() {
@@ -180,14 +160,25 @@ const Tweet: React.FC<Props> = ({
       <div className="flex w-full">
         {tweet.commentId && (
           <p className="ml-3 pl-12 text-xs text-gray-500">
-            Replying to <span className="font-medium">{commentUserDetails?.name}</span>
+            Replying to{" "}
+            <span className="font-medium">{commentUserDetails?.name}</span>
           </p>
         )}
       </div>
       <div className="flex h-full w-full space-x-2">
         <div className="flex h-full items-start">
           <div className="relative h-12 w-12">
-            {userDetails?.image  ? <Image className="rounded-full" src={userDetails?.image} loading="lazy" fill={true} alt="UserProfile" />: <MdAccountCircle className="h-full w-full text-black" />}
+            {userDetails?.image ? (
+              <Image
+                className="rounded-full"
+                src={userDetails?.image}
+                loading="lazy"
+                fill={true}
+                alt="UserProfile"
+              />
+            ) : (
+              <MdAccountCircle className="h-full w-full text-black" />
+            )}
           </div>
         </div>
         <div className="flex flex-col">

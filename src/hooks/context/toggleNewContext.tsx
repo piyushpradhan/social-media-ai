@@ -23,7 +23,7 @@ const initialState: ToggleStateType = {
 
 const ToggleContext = createContext<ToggleContextType | null>(null);
 
-export function ToggleProvider( {children }:{children: ReactNode} ) {
+export function ToggleProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState<ToggleStateType>(initialState);
 
   function toggleNewTweet() {

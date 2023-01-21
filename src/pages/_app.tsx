@@ -6,6 +6,9 @@ import { trpc } from "../utils/api";
 
 import "../styles/globals.css";
 import Layout from "../components/Layout";
+import { ModalProvider } from "../hooks/context/modalContext";
+import { LoadingProvider } from "../hooks/context/loadingContext";
+import { AppProvider } from "../hooks/context/appContext";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -13,9 +16,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <ModalProvider>
+        <AppProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </AppProvider>
+      </ModalProvider>
     </SessionProvider>
   );
 };

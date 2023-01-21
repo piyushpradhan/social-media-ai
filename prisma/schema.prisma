@@ -55,6 +55,7 @@ model User {
   image           String?
   accounts        Account[]
   sessions        Session[]
+  key             String    @default("")
   personality     String    @default("")
   tweetId         String?   @db.ObjectId
   tweets          Tweet[]   @relation("UserTweets")

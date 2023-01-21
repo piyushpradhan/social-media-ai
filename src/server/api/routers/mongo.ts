@@ -12,6 +12,18 @@ export const mongoRouter = createTRPCRouter({
         },
       });
     }),
+  updateUserApiKey: protectedProcedure
+    .input(z.object({ key: z.string() }))
+    .mutation(async ({ input: { key }, ctx }) => {
+      return ctx.prisma.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          key: key,
+        },
+      });
+    }),
   updateUserPersonality: protectedProcedure
     .input(z.object({ personality: z.string() }))
     .mutation(async ({ input: { personality }, ctx }) => {
