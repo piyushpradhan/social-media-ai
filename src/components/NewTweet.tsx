@@ -106,7 +106,7 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
       >
         <RxCross2
           onClick={closeNewTweet}
-          className="absolute top-8 left-8 text-white cursor-pointer"
+          className="absolute top-8 left-8 cursor-pointer text-white"
           size={24}
         />
         <div className="flex h-64 w-full flex-col items-center px-12 text-white md:w-1/2">
@@ -114,7 +114,11 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
             {loading?.tweetLoading ? (
               <Shimmer />
             ) : (
-              <p className={`h-full w-full text-center ${isMobileBreakpoint ? "" : "text-lg"}`}>
+              <p
+                className={`h-full w-full text-center ${
+                  isMobileBreakpoint ? "" : "text-lg"
+                }`}
+              >
                 {isOpen?.isNewTweetOpen ? generatedTweet : generatedComment}
               </p>
             )}
