@@ -1,26 +1,35 @@
-import React from "react";
-import type { Tweet as TweetModal, User } from "@prisma/client";
+import React, { useEffect, useState } from "react";
+import type { Tweet as TweetModel, User } from "@prisma/client";
 import { useToggleContext } from "../hooks/context/toggleContext";
 import { FiArrowLeft } from "react-icons/fi";
 import { trpc } from "../utils/api";
 import Tweet from "./Tweet";
-import useMediaQuery from "../hooks/mediaQuery";
+import { useLoadingContext } from "../hooks/context/loadingContext";
 
 type Props = {
-  tweet: TweetModal;
+  tweet: TweetModel;
   userDetails: User;
 };
 
 const SingleTweet: React.FC<Props> = ({ tweet, userDetails }: Props) => {
+  const [comments, setComments] = useState<TweetModel[]>([]);
+
   const toggleContext = useToggleContext();
-  const getComments = trpc.mongo.getComments.useQuery({
+  const loadingContext = useLoadingContext();
+
+  const commentsResponse = trpc.mongo.getComments.useQuery({
     tweetId: tweet.id,
   }).data;
   const currentTweet = trpc.mongo.getSingleTweet.useQuery({
     tweetId: tweet.id,
   }).data;
 
-  const isMobileBreakpoint = useMediaQuery(500);
+  useEffect(() => {
+    if (commentsResponse !== undefined) {
+      setComments(commentsResponse);
+      loadingContext?.toggleLoading(false);
+    }
+  }, [commentsResponse]);
 
   function closeSingleTweet() {
     toggleContext?.toggleSingleTweet(false);
@@ -46,7 +55,7 @@ const SingleTweet: React.FC<Props> = ({ tweet, userDetails }: Props) => {
             {currentTweet && <Tweet tweet={currentTweet} scaled={true} />}
           </div>
           {tweet.commentCount > 0 &&
-            getComments?.map((comment) => (
+            comments?.map((comment) => (
               <Tweet key={comment.id} tweet={comment} />
             ))}
         </div>
