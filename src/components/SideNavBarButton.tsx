@@ -43,24 +43,25 @@ const SideNavBarButton: React.FC<Props> = ({
     //   loadingContext?.toggleTweetLoading(false);
     // }, 600);
 
-    generateRandomTweet(userDetails?.personality || "")
-      .then((generated) => {
-        if (generated?.data?.choices[0]?.text === undefined) {
-          throw new Error("Could not generate tweet");
-        }
-        let newTweet: string | undefined =
-          generated?.data?.choices?.at(0)?.text;
-        if (newTweet?.includes("\n")) {
-          const lastNewLine = newTweet?.lastIndexOf("\n");
-          newTweet = newTweet?.substring(lastNewLine + 1);
-        }
+    userDetails?.key &&
+      generateRandomTweet(userDetails?.personality || "", userDetails?.key)
+        .then((generated) => {
+          if (generated?.data?.choices[0]?.text === undefined) {
+            throw new Error("Could not generate tweet");
+          }
+          let newTweet: string | undefined =
+            generated?.data?.choices?.at(0)?.text;
+          if (newTweet?.includes("\n")) {
+            const lastNewLine = newTweet?.lastIndexOf("\n");
+            newTweet = newTweet?.substring(lastNewLine + 1);
+          }
 
-        appContext?.setGeneratedTweet(newTweet ?? "");
-        loadingContext?.toggleTweetLoading(false);
-      })
-      .catch((err) => {
-        console.log("Error generating tweet", err);
-      });
+          appContext?.setGeneratedTweet(newTweet ?? "");
+          loadingContext?.toggleTweetLoading(false);
+        })
+        .catch((err) => {
+          console.log("Error generating tweet", err);
+        });
   }
 
   const handleClick = () => {
