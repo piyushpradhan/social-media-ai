@@ -5,6 +5,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import { trpc } from "../utils/api";
 import Tweet from "./Tweet";
 import { useLoadingContext } from "../hooks/context/loadingContext";
+import { useAppContext } from "../hooks/context/appContext";
 
 type Props = {
   tweet: TweetModel;
@@ -13,6 +14,7 @@ type Props = {
 
 const SingleTweet: React.FC<Props> = ({ tweet, userDetails }: Props) => {
   const [comments, setComments] = useState<TweetModel[]>([]);
+  const [currentTweet, setCurrentTweet] = useState<TweetModel>();
 
   const toggleContext = useToggleContext();
   const loadingContext = useLoadingContext();
@@ -20,7 +22,7 @@ const SingleTweet: React.FC<Props> = ({ tweet, userDetails }: Props) => {
   const commentsResponse = trpc.mongo.getComments.useQuery({
     tweetId: tweet.id,
   }).data;
-  const currentTweet = trpc.mongo.getSingleTweet.useQuery({
+  const currentTweetResponse = trpc.mongo.getSingleTweet.useQuery({
     tweetId: tweet.id,
   }).data;
 
@@ -30,6 +32,14 @@ const SingleTweet: React.FC<Props> = ({ tweet, userDetails }: Props) => {
       loadingContext?.toggleLoading(false);
     }
   }, [commentsResponse]);
+
+  // completely useless for noe
+  useEffect(() => {
+    if (currentTweetResponse !== null) {
+      setCurrentTweet(currentTweetResponse);
+      loadingContext?.toggleLoading(false);
+    }
+  }, [currentTweetResponse]);
 
   function closeSingleTweet() {
     toggleContext?.toggleSingleTweet(false);

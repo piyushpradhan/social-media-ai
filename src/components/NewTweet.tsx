@@ -34,6 +34,7 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
 
   const postCommentMutation = trpc.mongo.postComment.useMutation({
     onSuccess: async () => {
+      await utils.mongo.getComments.invalidate();
       await utils.mongo.getTweets.invalidate();
       toggleTweetLoading?.(false);
     },

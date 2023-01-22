@@ -5,8 +5,6 @@ import useMediaQuery from "../hooks/mediaQuery";
 import { trpc } from "../utils/api";
 import type { Tweet as TweetModel } from "@prisma/client";
 import { useLoadingContext } from "../hooks/context/loadingContext";
-import NewTweet from "../components/NewTweet";
-import SideNavBar from "../components/SideNavBar";
 
 const Feed: NextPage = () => {
   const isMobileBreakpoint = useMediaQuery(500);

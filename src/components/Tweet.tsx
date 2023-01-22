@@ -52,7 +52,9 @@ const Tweet: React.FC<Props> = ({
 
   const likeTweetMutation = trpc.mongo.likeTweet.useMutation({
     onSuccess: async () => {
+      // await utils.mongo.getSingleTweet.invalidate();
       await utils.mongo.getTweets.invalidate();
+      // await utils.mongo.getTweets.invalidate();
     },
   });
   const unlikeTweetMutation = trpc.mongo.unlikeTweet.useMutation({
