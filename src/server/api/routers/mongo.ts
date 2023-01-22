@@ -6,6 +6,9 @@ export const mongoRouter = createTRPCRouter({
   getUser: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(({ input: { userId }, ctx }) => {
+      if (userId === "") {
+        throw new Error("Invalid user Id");
+      }
       return ctx.prisma.user.findUnique({
         where: {
           id: userId,
