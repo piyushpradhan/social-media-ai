@@ -1,14 +1,20 @@
 import type { NextPage } from "next";
 import Image from "next/image";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { MdAccountCircle } from "react-icons/md";
 import Tweet from "../components/Tweet";
 import { trpc } from "../utils/api";
+import { useModalContext } from "../hooks/context/modalContext";
 
 const Profile: NextPage = () => {
   const userDetails = trpc.mongo.getUserFromSession.useQuery().data;
   const userTweets = trpc.mongo.getTweetsFromCurrentUser.useQuery().data;
   const personalityRef = useRef<HTMLTextAreaElement>(null);
+  const modalContext = useModalContext();
+
+  useEffect(() => {
+    modalContext?.toggleKeyPromptModal(false);
+  }, []);
 
   const updatePersonalityMutation =
     trpc.mongo.updateUserPersonality.useMutation({
@@ -24,7 +30,7 @@ const Profile: NextPage = () => {
   }
 
   return (
-    <div className="flex w-full flex-col space-y-2 p-2 h-screen overflow-y-auto">
+    <div className="flex h-screen w-full flex-col space-y-2 overflow-y-auto p-2">
       <div className="">
         <div className="flex flex-col items-center border border-black py-4">
           {userDetails?.image ? (
@@ -39,7 +45,7 @@ const Profile: NextPage = () => {
           ) : (
             <MdAccountCircle size={100} className="text-black" />
           )}
-          <p className="py-1 font-semibold text-xl">{userDetails?.name}</p>
+          <p className="py-1 text-xl font-semibold">{userDetails?.name}</p>
           <p className="text-sm">{userDetails?.email}</p>
         </div>
       </div>

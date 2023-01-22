@@ -71,7 +71,9 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
     //   toggleTweetLoading?.(false);
     // }, 600);
     //
-    generateRandomTweet(userDetails?.personality || "")
+
+    //TODO: add an alert or something
+    generateRandomTweet(userDetails?.personality ?? "", userDetails?.key)
       .then((generated) => {
         if (generated?.data?.choices[0]?.text === undefined) {
           throw new Error("Could not generate tweet");

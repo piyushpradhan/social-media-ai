@@ -1,11 +1,16 @@
 import { Configuration, OpenAIApi } from "openai";
 
-const configuration = new Configuration({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+const configure = (key: string): OpenAIApi => {
+  const configuration = new Configuration({
+    apiKey: key,
+  });
 
-export const generateRandomTweet = async (personality: string) => {
+  const openai = new OpenAIApi(configuration);
+  return openai;
+};
+
+export const generateRandomTweet = async (personality: string, key: string) => {
+  const openai = configure(key);
   try {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
@@ -26,10 +31,8 @@ export const generateRandomTweet = async (personality: string) => {
   }
 };
 
-export const generateRandomComment = async (
-  personality: string,
-  tweet: string
-) => {
+export const generateRandomComment = async (tweet: string, key: string) => {
+  const openai = configure(key);
   try {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
