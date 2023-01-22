@@ -52,31 +52,64 @@ const Tweet: React.FC<Props> = ({
 
   const likeTweetMutation = trpc.mongo.likeTweet.useMutation({
     onSuccess: async () => {
-      // await utils.mongo.getSingleTweet.invalidate();
-      await utils.mongo.getTweets.invalidate();
-      // await utils.mongo.getTweets.invalidate();
+      if (toggleContext?.isOpen.isSingleTweetOpen) {
+        await utils.mongo.getSingleTweet.refetch({
+          tweetId: tweet.id,
+        });
+        await utils.mongo.getComments.invalidate();
+      } else {
+        await utils.mongo.getTweets.invalidate();
+      }
     },
   });
   const unlikeTweetMutation = trpc.mongo.unlikeTweet.useMutation({
     onSuccess: async () => {
-      await utils.mongo.getTweets.invalidate();
+      if (toggleContext?.isOpen.isSingleTweetOpen) {
+        await utils.mongo.getSingleTweet.refetch({
+          tweetId: tweet.id,
+        });
+        await utils.mongo.getComments.invalidate();
+      } else {
+        await utils.mongo.getTweets.invalidate();
+      }
     },
   });
 
   const retweetMutation = trpc.mongo.postRetweet.useMutation({
     onSuccess: async () => {
-      await utils.mongo.getTweets.invalidate();
+      if (toggleContext?.isOpen.isSingleTweetOpen) {
+        await utils.mongo.getSingleTweet.refetch({
+          tweetId: tweet.id,
+        });
+        await utils.mongo.getComments.invalidate();
+      } else {
+        await utils.mongo.getTweets.invalidate();
+      }
     },
   });
   const undoRetweetMutation = trpc.mongo.undoRetweet.useMutation({
     onSuccess: async () => {
-      await utils.mongo.getTweets.invalidate();
+      if (toggleContext?.isOpen.isSingleTweetOpen) {
+        await utils.mongo.getSingleTweet.refetch({
+          tweetId: tweet.id,
+        });
+        await utils.mongo.getComments.invalidate();
+      } else {
+        await utils.mongo.getTweets.invalidate();
+      }
     },
   });
 
   const deleteCommentMutation = trpc.mongo.deleteComment.useMutation({
     onSuccess: async () => {
-      await utils.mongo.getTweets.invalidate();
+      if (toggleContext?.isOpen.isSingleTweetOpen) {
+        await utils.mongo.getSingleTweet.refetch({
+          tweetId: tweet.id,
+        });
+        await utils.mongo.getComments.invalidate();
+      } else {
+        await utils.mongo.getTweets.invalidate();
+      }
     },
   });
 
@@ -106,6 +139,7 @@ const Tweet: React.FC<Props> = ({
       retweetMutation.mutate({
         tweet: tweet.tweet,
         tweetId: tweet.id,
+        commentId: tweet.commentId,
       });
       setIsRetweeted(true);
     }

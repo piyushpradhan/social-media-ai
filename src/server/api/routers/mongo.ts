@@ -174,9 +174,15 @@ export const mongoRouter = createTRPCRouter({
       });
     }),
   postRetweet: protectedProcedure
-    .input(z.object({ tweetId: z.string(), tweet: z.string() }))
-    .mutation(async ({ input: { tweet, tweetId }, ctx }) => {
-      await ctx.prisma.tweet.create({
+    .input(
+      z.object({
+        tweetId: z.string(),
+        tweet: z.string(),
+        commentId: z.string().nullable(),
+      })
+    )
+    .mutation(async ({ input: { tweet, tweetId, commentId }, ctx }) => {
+      const createdRetweet = await ctx.prisma.tweet.create({
         data: {
           tweet: tweet,
           user: {
@@ -186,6 +192,23 @@ export const mongoRouter = createTRPCRouter({
           },
         },
       });
+      if (commentId) {
+        await ctx.prisma.tweet.update({
+          where: {
+            id: commentId,
+          },
+          data: {
+            commentCount: {
+              increment: 1,
+            },
+            comments: {
+              connect: {
+                id: createdRetweet.id,
+              },
+            },
+          },
+        });
+      }
       return ctx.prisma.tweet.update({
         where: {
           id: tweetId,

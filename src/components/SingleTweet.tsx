@@ -33,7 +33,7 @@ const SingleTweet: React.FC<Props> = ({ tweet, userDetails }: Props) => {
     }
   }, [commentsResponse]);
 
-  // completely useless for noe
+  // completely useless for now
   useEffect(() => {
     if (currentTweetResponse !== null) {
       setCurrentTweet(currentTweetResponse);
@@ -64,10 +64,9 @@ const SingleTweet: React.FC<Props> = ({ tweet, userDetails }: Props) => {
           <div className="w-full px-2 pt-2">
             {currentTweet && <Tweet tweet={currentTweet} scaled={true} />}
           </div>
-          {tweet.commentCount > 0 &&
-            comments?.map((comment) => (
-              <Tweet key={comment.id} tweet={comment} />
-            ))}
+          {comments?.map((comment) => (
+            <Tweet key={comment.id} tweet={comment} />
+          ))}
         </div>
       </div>
     </div>
