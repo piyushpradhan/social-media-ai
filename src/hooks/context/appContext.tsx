@@ -31,24 +31,24 @@ export function AppProvider({ children }: AppComponentProps) {
   const [appState, setAppState] = useState<AppStateType>(initialState);
 
   function setGeneratedTweet(tweet: string) {
-    setAppState({
-      ...appState,
+    setAppState((prev) => ({
+      ...prev,
       generatedTweet: tweet,
-    });
+    }));
   }
 
   function setGeneratedComment(comment: string) {
-    setAppState({
-      ...appState,
+    setAppState((prev) => ({
+      ...prev,
       generatedComment: comment,
-    });
+    }));
   }
 
   function setSelectedTweet(tweet: Tweet) {
-    setAppState({
-      ...appState,
+    setAppState((prev) => ({
+      ...prev,
       selectedTweet: tweet,
-    });
+    }));
   }
 
   return (

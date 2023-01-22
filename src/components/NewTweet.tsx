@@ -50,6 +50,8 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
       }
     } else if (isOpen?.isNewCommentOpen) {
       toggleNewComment?.();
+      console.log(selectedTweet);
+      console.log(selectedTweet?.id, generatedComment);
       if (selectedTweet?.id !== undefined && generatedComment !== undefined) {
         postCommentMutation.mutate({
           tweetId: selectedTweet?.id,
