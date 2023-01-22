@@ -2,7 +2,6 @@ import React from "react";
 import type { Tweet as TweetModal, User } from "@prisma/client";
 import { useToggleContext } from "../hooks/context/toggleContext";
 import { FiArrowLeft } from "react-icons/fi";
-import ScaledTweet from "../components/ScaledTweet";
 import { trpc } from "../utils/api";
 import Tweet from "./Tweet";
 import useMediaQuery from "../hooks/mediaQuery";
@@ -44,7 +43,7 @@ const SingleTweet: React.FC<Props> = ({ tweet, userDetails }: Props) => {
         </div>
         <div className="flex h-full w-full max-w-3xl flex-col">
           <div className="w-full px-2 pt-2">
-            {currentTweet && <ScaledTweet tweet={currentTweet} />}
+            {currentTweet && <Tweet tweet={currentTweet} scaled={true} />}
           </div>
           {tweet.commentCount > 0 &&
             getComments?.map((comment) => (

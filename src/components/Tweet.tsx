@@ -16,9 +16,16 @@ import { useRouter } from "next/router";
 
 type Props = {
   tweet: TweetModel;
+  scaled?: boolean;
 };
 
-const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
+const Tweet: React.FC<Props> = ({
+  tweet,
+  scaled = false,
+}: {
+  tweet: TweetModel;
+  scaled?: boolean;
+}) => {
   const utils = trpc.useContext();
   const router = useRouter();
 
@@ -158,9 +165,9 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
   }
 
   function openSingleTweet() {
-    // if (tweet.commentId) {
-    //   return;
-    // }
+    if ((scaled && tweet.commentId) || scaled) {
+      return;
+    }
     appContext?.setSelectedTweet(tweet);
     toggleContext?.toggleSingleTweet(true);
   }
@@ -169,16 +176,25 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
     router
       .push(`/profile/${userDetails?.id ?? ""}`)
       .then(() => {
-        `Navigated to ${userDetails?.name ?? ""}'s profile`;
+        // close the single tweet
+        // toggleContext?.toggleSingleTweet(false);
       })
       .catch((err: any) => console.error(err));
   }
 
   return (
-    <div className="flex w-full flex-col items-center space-x-2 border-b border-black px-4 pt-4 pb-2">
+    <div
+      className={`flex w-full flex-col items-center space-x-2 border-b border-black ${
+        scaled ? "py-2" : "px-4 pt-4 pb-2"
+      }`}
+    >
       <div className="flex w-full ">
         {tweet.commentId && (
-          <p className="ml-3 flex pl-12 text-xs text-gray-500">
+          <p
+            className={`flex text-xs text-gray-500 ${
+              scaled ? "pl-16" : "ml-3 pl-12"
+            }`}
+          >
             <BiSubdirectoryRight className="text-sm" /> Replying to{" "}
             <span className="font-medium">{commentUserDetails?.name}</span>
           </p>
@@ -186,7 +202,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
       </div>
       <div className="flex h-full w-full space-x-2">
         <div className="flex h-full items-start">
-          <div className="relative h-12 w-12">
+          <div className={`relative ${scaled ? "h-16 w-16" : "h-12 w-12"}`}>
             {userDetails?.image ? (
               <Image
                 className="rounded-full"
@@ -194,6 +210,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
                 loading="lazy"
                 fill={true}
                 alt="UserProfile"
+                sizes="100%"
               />
             ) : (
               <MdAccountCircle className="h-full w-full text-black" />
@@ -202,7 +219,9 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
         </div>
         <div className="flex w-full flex-col">
           <p
-            className="text-md cursor-pointer font-semibold"
+            className={`${
+              scaled ? "text-xl" : "text-md"
+            } cursor-pointer font-semibold`}
             onClick={navigateToProfile}
           >
             {userDetails?.name}
@@ -250,7 +269,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
             <BsShare size={14} />
           </div>
         </div>
-        <div className="relative flex h-full items-start pr-1">
+        <div className="relative flex h-full items-start pr-2">
           <BsThreeDots size={12} className="cursor-pointer" />
         </div>
       </div>
