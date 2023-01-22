@@ -9,7 +9,10 @@ export const generateRandomTweet = async (personality: string) => {
   try {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: personality.trim().length === 0 ? "Write a random tweet" : `Write a random tweet that you have never written before assuming you're interested in ${personality}`,
+      prompt:
+        personality.trim().length === 0
+          ? "Write a random tweet"
+          : `Write a random tweet that you have never written before assuming you're interested in ${personality}`,
       temperature: 0.9,
       max_tokens: 60,
       top_p: 1,
@@ -19,15 +22,18 @@ export const generateRandomTweet = async (personality: string) => {
 
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
-export const generateRandomComment = async (personality: string, tweet: string) => {
+export const generateRandomComment = async (
+  personality: string,
+  tweet: string
+) => {
   try {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `Write a comment for the following tweet: ${tweet}`, 
+      prompt: `Write a comment for the following tweet: ${tweet}`,
       temperature: 0.6,
       max_tokens: 60,
       top_p: 1,
@@ -37,6 +43,6 @@ export const generateRandomComment = async (personality: string, tweet: string) 
 
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

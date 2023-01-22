@@ -128,7 +128,6 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
     //     "Just COMMENT finished up a project using #Type script - so much fi andDefinitely the way to go for large scale applications. #jsdevs" +
     //       random.toString()
     //   );
-    //   console.log("COMMENT GENERATED", appContext?.appState.generatedComment);
     //   loadingContext?.toggleTweetLoading?.(false);
     // }, 600);
 
@@ -201,7 +200,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
             )}
           </div>
         </div>
-        <div className="flex flex-col w-full">
+        <div className="flex w-full flex-col">
           <p
             className="text-md cursor-pointer font-semibold"
             onClick={navigateToProfile}

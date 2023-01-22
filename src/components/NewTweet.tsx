@@ -86,7 +86,7 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
         toggleTweetLoading?.(false);
       })
       .catch((err) => {
-        console.log("Error generating tweet", err);
+        console.error("Error generating tweet", err);
       });
   }
 

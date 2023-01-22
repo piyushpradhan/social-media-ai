@@ -45,9 +45,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
 
   const likeTweetMutation = trpc.mongo.likeTweet.useMutation({
     onSuccess: async () => {
-      await utils.mongo.getTweets.invalidate().then((data) => console.log("INSIDE THE THEN", data) );
-      await utils.mongo.getComments.invalidate();
-      console.log(tweet);
+      await utils.mongo.getTweets.invalidate();
     },
   });
   const unlikeTweetMutation = trpc.mongo.unlikeTweet.useMutation({
@@ -130,14 +128,10 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
     //     "Just COMMENT finished up a project using #Type script - so much fi andDefinitely the way to go for large scale applications. #jsdevs" +
     //       random.toString()
     //   );
-    //   console.log("COMMENT GENERATED", appContext?.appState.generatedComment);
     //   loadingContext?.toggleTweetLoading?.(false);
     // }, 600);
 
-    generateRandomComment(
-      userDetails?.personality ?? "",
-      tweet.tweet
-    )
+    generateRandomComment(userDetails?.personality ?? "", tweet.tweet)
       .then((generated) => {
         if (generated?.data?.choices[0]?.text === undefined) {
           throw new Error("Could not generate tweet");
@@ -216,7 +210,11 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
           </div>
           <div className="flex justify-between pt-2">
             <div className="flex items-center justify-center space-x-1">
-              <FaRegComment className="cursor-pointer" size={14} onClick={generateComment} />
+              <FaRegComment
+                className="cursor-pointer"
+                size={14}
+                onClick={generateComment}
+              />
               <p className="text-xs text-gray-800">{tweet.commentCount}</p>
             </div>
             <div className="flex items-center justify-center space-x-1">
@@ -224,10 +222,14 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
                 <FaHeart
                   size={14}
                   onClick={unlikeTweet}
-                  className="text-red-600 cursor-pointer"
+                  className="cursor-pointer text-red-600"
                 />
               ) : (
-                <FaRegHeart size={14} onClick={likeTweet} className="cursor-pointer" />
+                <FaRegHeart
+                  size={14}
+                  onClick={likeTweet}
+                  className="cursor-pointer"
+                />
               )}
               <p className="text-xs text-gray-800">{tweet.likes}</p>
             </div>
@@ -235,7 +237,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
               <AiOutlineRetweet
                 size={14}
                 onClick={retweet}
-                className={`text-xs cursor-pointer ${
+                className={`cursor-pointer text-xs ${
                   isRetweeted ? "disable text-green-500" : "text-gray-800"
                 }`}
               />
@@ -247,7 +249,7 @@ const Tweet: React.FC<Props> = ({ tweet }: { tweet: TweetModel }) => {
           </div>
         </div>
         <div className="flex h-full items-start pr-2">
-          <BsThreeDots size={12} className="cursor-pointer"/>
+          <BsThreeDots size={12} className="cursor-pointer" />
         </div>
       </div>
     </div>

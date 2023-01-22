@@ -40,10 +40,10 @@ const AuthShowcase: React.FC = () => {
     if (sessionData) {
       Router.push("/feed")
         .then((success) => {
-          console.log(success);
+          console.log("Navigated to /feed");
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     }
   });
