@@ -26,7 +26,7 @@ const Feed: NextPage = () => {
     <div className="w-full overflow-x-hidden">
       {isMobileBreakpoint ? (
         <div className="flex flex-col-reverse justify-end space-y-2">
-          {tweets?.reverse().map((tweet, index) => (
+          {tweets?.map((tweet, index) => (
             <Tweet key={index} tweet={tweet} />
           ))}
         </div>
