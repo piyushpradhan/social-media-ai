@@ -174,24 +174,26 @@ const Tweet: React.FC<Props> = ({
     //   loadingContext?.toggleTweetLoading?.(false);
     // }, 600);
 
-    generateRandomComment(userDetails?.personality ?? "", tweet.tweet)
-      .then((generated) => {
-        if (generated?.data?.choices[0]?.text === undefined) {
-          throw new Error("Could not generate tweet");
-        }
-        let newComment: string | undefined =
-          generated?.data?.choices?.at(0)?.text;
-        if (newComment?.includes("\n")) {
-          const lastNewLine = newComment?.lastIndexOf("\n");
-          newComment = newComment?.substring(lastNewLine + 1);
-        }
+    // TODO: Show an alert or something
+    userDetails?.key &&
+      generateRandomComment(tweet.tweet, userDetails?.key)
+        .then((generated) => {
+          if (generated?.data?.choices[0]?.text === undefined) {
+            throw new Error("Could not generate tweet");
+          }
+          let newComment: string | undefined =
+            generated?.data?.choices?.at(0)?.text;
+          if (newComment?.includes("\n")) {
+            const lastNewLine = newComment?.lastIndexOf("\n");
+            newComment = newComment?.substring(lastNewLine + 1);
+          }
 
-        appContext?.setGeneratedComment(newComment ?? "");
-        loadingContext?.toggleTweetLoading(false);
-      })
-      .catch((err) => {
-        console.log("Error generating tweet", err);
-      });
+          appContext?.setGeneratedComment(newComment ?? "");
+          loadingContext?.toggleTweetLoading(false);
+        })
+        .catch((err) => {
+          console.log("Error generating tweet", err);
+        });
   }
 
   function generateComment() {

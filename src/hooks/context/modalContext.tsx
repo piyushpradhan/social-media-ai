@@ -1,13 +1,16 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import type { ReactNode } from "react";
+import { createContext, useContext, useState } from "react";
 
 type ModalStateType = {
-  isOpen: boolean;
+  isProfileModalOpen: boolean;
+  isKeyPromptModalOpen: boolean;
   key: string;
 };
 
 type ModalContextType = {
   modalState: ModalStateType;
   toggleModal: (value?: boolean) => void;
+  toggleKeyPromptModal: (value?: boolean) => void;
   setKey: (key: string) => void;
 };
 
@@ -16,7 +19,8 @@ type ModalPropsType = {
 };
 
 const initialState: ModalStateType = {
-  isOpen: false,
+  isProfileModalOpen: false,
+  isKeyPromptModalOpen: true,
   key: "",
 };
 
@@ -28,7 +32,14 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   function toggleModal(value?: boolean) {
     setModalState({
       ...modalState,
-      isOpen: value ?? !modalState.isOpen,
+      isProfileModalOpen: value ?? !modalState.isProfileModalOpen,
+    });
+  }
+
+  function toggleKeyPromptModal(vaule?: boolean) {
+    setModalState({
+      ...modalState,
+      isKeyPromptModalOpen: vaule ?? !modalState.isKeyPromptModalOpen,
     });
   }
 
@@ -40,14 +51,17 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ModalContext.Provider value={{ 
-        modalState, 
+    <ModalContext.Provider
+      value={{
+        modalState,
         toggleModal,
-        setKey
-      }}>
+        toggleKeyPromptModal,
+        setKey,
+      }}
+    >
       {children}
-      </ModalContext.Provider>
-  )
+    </ModalContext.Provider>
+  );
 }
 
 export function useModalContext() {
