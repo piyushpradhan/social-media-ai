@@ -13,6 +13,7 @@ import { useLoadingContext } from "../hooks/context/loadingContext";
 import { useAppContext } from "../hooks/context/appContext";
 import { generateRandomComment } from "../utils/generateTweet";
 import { useRouter } from "next/router";
+import TweetDropDown from "./TweetDropDown";
 
 type Props = {
   tweet: TweetModel;
@@ -307,9 +308,13 @@ const Tweet: React.FC<Props> = ({
             <BsShare size={14} />
           </div>
         </div>
-        <div className="relative flex h-full items-start pr-2">
-          <BsThreeDots size={12} className="cursor-pointer" />
-        </div>
+        {currentUserDetails && (
+          <TweetDropDown
+            tweet={tweet}
+            scaled={scaled}
+            currentUser={currentUserDetails}
+          />
+        )}
       </div>
     </div>
   );

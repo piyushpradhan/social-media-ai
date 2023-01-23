@@ -75,8 +75,16 @@ export const mongoRouter = createTRPCRouter({
       });
     }),
   deleteTweet: protectedProcedure
-    .input(z.object({ tweetId: z.string() }))
-    .query(({ input: { tweetId }, ctx }) => {
+    .input(z.object({ tweetId: z.string(), tweetUserId: z.string() }))
+    .mutation(async ({ input: { tweetId, tweetUserId }, ctx }) => {
+      if (tweetUserId !== ctx.session.user.id) {
+        throw new Error("Unauthroized");
+      }
+      await ctx.prisma.tweet.deleteMany({
+        where: {
+          commentId: tweetId,
+        },
+      });
       return ctx.prisma.tweet.delete({
         where: {
           id: tweetId,

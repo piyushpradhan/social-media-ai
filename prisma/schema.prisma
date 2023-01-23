@@ -87,7 +87,7 @@ model Tweet {
   userId           String   @db.ObjectId
   user             User     @relation("UserTweets", fields: [userId], references: [id], onDelete: Cascade)
   commentId        String?  @db.ObjectId
-  comment          Tweet?   @relation("TweetComments", fields: [commentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  comment          Tweet?   @relation("TweetComments", fields: [commentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   comments         Tweet[]  @relation("TweetComments")
   date             DateTime @default(now())
   likedUserIDs     String[] @db.ObjectId
