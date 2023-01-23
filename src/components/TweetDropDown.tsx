@@ -9,11 +9,9 @@ import { useAppContext } from "../hooks/context/appContext";
 
 const TweetDropDown = ({
   tweet,
-  scaled,
   currentUser,
 }: {
   tweet: Tweet;
-  scaled: boolean;
   currentUser: User;
 }) => {
   const utils = trpc.useContext();

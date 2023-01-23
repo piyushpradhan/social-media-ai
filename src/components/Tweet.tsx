@@ -311,7 +311,6 @@ const Tweet: React.FC<Props> = ({
         {currentUserDetails && (
           <TweetDropDown
             tweet={tweet}
-            scaled={scaled}
             currentUser={currentUserDetails}
           />
         )}
