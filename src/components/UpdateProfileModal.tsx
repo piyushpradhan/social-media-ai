@@ -34,7 +34,7 @@ const UpdateProfileModal = () => {
       toggleContext?.toggleIsInvalidKey(false);
       modalContext?.toggleModal(false);
       return;
-    } 
+    }
     toggleContext?.toggleIsInvalidKey(true);
   }
 

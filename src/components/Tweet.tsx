@@ -40,7 +40,7 @@ const Tweet: React.FC<Props> = ({
 
   let commentDetails;
   let commentUserDetails;
-  if (tweet.commentId) {
+  if (tweet.commentId && scaled) {
     commentDetails = trpc.mongo.getSingleTweet.useQuery({
       tweetId: tweet.commentId ?? "",
     }).data;
