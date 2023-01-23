@@ -30,24 +30,24 @@ export function ModalProvider({ children }: { children: ReactNode }) {
   const [modalState, setModalState] = useState<ModalStateType>(initialState);
 
   function toggleModal(value?: boolean) {
-    setModalState({
-      ...modalState,
-      isProfileModalOpen: value ?? !modalState.isProfileModalOpen,
-    });
+    setModalState((prev) => ({
+      ...prev,
+      isProfileModalOpen: value ?? !prev.isProfileModalOpen,
+    }));
   }
 
   function toggleKeyPromptModal(vaule?: boolean) {
-    setModalState({
-      ...modalState,
-      isKeyPromptModalOpen: vaule ?? !modalState.isKeyPromptModalOpen,
-    });
+    setModalState((prev) => ({
+      ...prev,
+      isKeyPromptModalOpen: vaule ?? !prev.isKeyPromptModalOpen,
+    }));
   }
 
   function setKey(key: string) {
-    setModalState({
-      ...modalState,
+    setModalState((prev) => ({
+      ...prev,
       key: key,
-    });
+    }));
   }
 
   return (

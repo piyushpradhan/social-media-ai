@@ -78,17 +78,15 @@ const UpdateProfileModal = () => {
             >
               Update
             </button>
-            <button className="flex w-full items-center justify-center space-x-2 border border-black px-2 py-1">
-              <Link
-                href="https://openai.com/api/"
-                className="text-center"
-                rel="noreferrer noopener"
-                target="_blank"
-              >
-                Get one
-              </Link>
+            <Link
+              href="https://beta.openai.com/account/api-keys"
+              rel="noreferrer noopener"
+              target="_blank"
+              className="flex w-full items-center justify-center space-x-2 border border-black px-2 py-1"
+            >
+              <p className="text-center">Get one</p>
               <IoOpenOutline className="font-semibold text-black" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
