@@ -5,12 +5,18 @@ import { MdAccountCircle } from "react-icons/md";
 import Image from "next/image";
 import Link from "next/link";
 import { IoOpenOutline } from "react-icons/io5";
+import { isValidKey } from "../utils/validate";
+import { useToggleContext } from "../hooks/context/toggleContext";
+import InvalidKey from "./errors/InvalidKey";
 
 const UpdateProfileModal = () => {
   const utils = trpc.useContext();
   const userDetails = trpc.mongo.getUserFromSession.useQuery().data;
-  const modalContext = useModalContext();
   const keyInputRef = useRef<HTMLInputElement>(null);
+
+  const modalContext = useModalContext();
+  const toggleContext = useToggleContext();
+
   const updateApiKeyMutation = trpc.mongo.updateUserApiKey.useMutation({
     onSuccess: async () => {
       await utils.mongo.getUserFromSession.invalidate();
@@ -22,8 +28,14 @@ const UpdateProfileModal = () => {
   }
 
   function updateApiKey() {
-    updateApiKeyMutation.mutate({ key: keyInputRef.current?.value ?? "" });
-    modalContext?.toggleModal(false);
+    if (keyInputRef.current && isValidKey(keyInputRef.current.value)) {
+      updateApiKeyMutation.mutate({ key: keyInputRef.current?.value ?? "" });
+      modalContext?.setKey(keyInputRef.current?.value);
+      toggleContext?.toggleIsInvalidKey(false);
+      modalContext?.toggleModal(false);
+      return;
+    } 
+    toggleContext?.toggleIsInvalidKey(true);
   }
 
   return (
@@ -71,6 +83,7 @@ const UpdateProfileModal = () => {
             ref={keyInputRef}
             onSubmit={updateApiKey}
           />
+          <InvalidKey />
           <div className="mt-2 flex w-full flex-col items-center space-y-2 md:flex-row md:space-x-2 md:space-y-0">
             <button
               className="w-full border border-black bg-black px-2 py-1 text-white first-letter:rounded-sm"

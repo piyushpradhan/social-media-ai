@@ -5,11 +5,15 @@ import { MdAccountCircle } from "react-icons/md";
 import Image from "next/image";
 import Link from "next/link";
 import { IoOpenOutline } from "react-icons/io5";
+import { isValidKey } from "../utils/validate";
+import InvalidKey from "./errors/InvalidKey";
+import { useToggleContext } from "../hooks/context/toggleContext";
 
 const NoApiKeyModal = () => {
   const utils = trpc.useContext();
   const userDetails = trpc.mongo.getUserFromSession.useQuery().data;
   const modalContext = useModalContext();
+  const toggleContext = useToggleContext();
   const keyInputRef = useRef<HTMLInputElement>(null);
   const updateApiKeyMutation = trpc.mongo.updateUserApiKey.useMutation({
     onSuccess: async () => {
@@ -18,11 +22,13 @@ const NoApiKeyModal = () => {
   });
 
   function updateApiKey() {
-    // TODO: Add some validation to check whether the API key is valid
-    if (keyInputRef.current && keyInputRef.current.value.trim() !== "") {
+    if (keyInputRef.current && isValidKey(keyInputRef.current.value)) {
       updateApiKeyMutation.mutate({ key: keyInputRef.current?.value });
+      toggleContext?.toggleIsInvalidKey(false);
       modalContext?.setKey(keyInputRef.current?.value);
+      return;
     }
+    toggleContext?.toggleIsInvalidKey(true);
   }
 
   return (
@@ -59,6 +65,7 @@ const NoApiKeyModal = () => {
               ref={keyInputRef}
               onSubmit={updateApiKey}
             />
+            <InvalidKey />
             <div className="mt-2 flex w-full flex-col items-center space-y-2 md:flex-row md:space-x-2 md:space-y-0">
               <button
                 className="w-full border border-black bg-black px-2 py-1 font-semibold text-white first-letter:rounded-sm"
@@ -66,17 +73,15 @@ const NoApiKeyModal = () => {
               >
                 Update
               </button>
-              <button className="flex w-full items-center justify-center space-x-2 border border-black px-2 py-1">
-                <Link
-                  href="https://beta.openai.com/account/api-keys"
-                  className="text-center"
-                  rel="noreferrer noopener"
-                  target="_blank"
-                >
-                  Get one
-                </Link>
+              <Link
+                href="https://beta.openai.com/account/api-keys"
+                rel="noreferrer noopener"
+                target="_blank"
+                className="flex w-full items-center justify-center space-x-2 border border-black px-2 py-1"
+              >
+                <p className="text-center">Get one</p>
                 <IoOpenOutline className="font-semibold text-black" />
-              </button>
+              </Link>
             </div>
           </div>
         </div>

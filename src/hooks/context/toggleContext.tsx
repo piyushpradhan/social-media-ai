@@ -5,6 +5,7 @@ type ToggleStateType = {
   isNewCommentOpen: boolean;
   isSingleTweetOpen: boolean;
   isKeyPromptOpen: boolean;
+  isInvalidKeyOpen: boolean;
 };
 
 type ToggleContextType = {
@@ -14,6 +15,7 @@ type ToggleContextType = {
   toggleNewComment: () => void;
   toggleSingleTweet: (value: boolean) => void;
   toggleKeyPrompt: (value: boolean) => void;
+  toggleIsInvalidKey: (value: boolean) => void;
 };
 
 type ToggleComponentPropsType = {
@@ -25,6 +27,7 @@ const initialState: ToggleStateType = {
   isNewCommentOpen: false,
   isSingleTweetOpen: false,
   isKeyPromptOpen: false,
+  isInvalidKeyOpen: false,
 };
 
 const ToggleContext = createContext<ToggleContextType | null>(null);
@@ -72,6 +75,13 @@ export function ToggleProvider({ children }: { children: ReactNode }) {
     });
   }
 
+  function toggleIsInvalidKey(value: boolean) {
+    setIsOpen((prev) => ({
+      ...isOpen,
+      isInvalidKeyOpen: value ?? !prev.isInvalidKeyOpen,
+    }));
+  }
+
   return (
     <ToggleContext.Provider
       value={{
@@ -81,6 +91,7 @@ export function ToggleProvider({ children }: { children: ReactNode }) {
         toggleNewComment,
         toggleSingleTweet,
         toggleKeyPrompt,
+        toggleIsInvalidKey,
       }}
     >
       {children}
