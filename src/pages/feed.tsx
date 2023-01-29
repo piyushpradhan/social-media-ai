@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
-import Tweet from "../components/Tweet";
+import Tweet from "../components/Tweet/Tweet";
 import useMediaQuery from "../hooks/mediaQuery";
 import { trpc } from "../utils/api";
 import type { Tweet as TweetModel } from "@prisma/client";

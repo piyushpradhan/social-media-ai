@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { trpc } from "../utils/api";
+import { trpc } from "../../utils/api";
 import Image from "next/image";
 import { FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
 import { AiOutlineRetweet } from "react-icons/ai";
@@ -8,10 +8,10 @@ import { MdAccountCircle } from "react-icons/md";
 import type { Tweet as TweetModel } from "@prisma/client";
 import { BiSubdirectoryRight } from "react-icons/bi";
 
-import { useToggleContext } from "../hooks/context/toggleContext";
-import { useLoadingContext } from "../hooks/context/loadingContext";
-import { useAppContext } from "../hooks/context/appContext";
-import { generateRandomComment } from "../utils/generateTweet";
+import { useToggleContext } from "../../hooks/context/toggleContext";
+import { useLoadingContext } from "../../hooks/context/loadingContext";
+import { useAppContext } from "../../hooks/context/appContext";
+import { generateRandomComment } from "../../utils/generateTweet";
 import { useRouter } from "next/router";
 import TweetDropDown from "./TweetDropDown";
 
@@ -309,10 +309,7 @@ const Tweet: React.FC<Props> = ({
           </div>
         </div>
         {currentUserDetails && (
-          <TweetDropDown
-            tweet={tweet}
-            currentUser={currentUserDetails}
-          />
+          <TweetDropDown tweet={tweet} currentUser={currentUserDetails} />
         )}
       </div>
     </div>

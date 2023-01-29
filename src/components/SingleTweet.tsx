@@ -3,7 +3,7 @@ import type { Tweet as TweetModel, User } from "@prisma/client";
 import { useToggleContext } from "../hooks/context/toggleContext";
 import { FiArrowLeft } from "react-icons/fi";
 import { trpc } from "../utils/api";
-import Tweet from "./Tweet";
+import Tweet from "./Tweet/Tweet";
 import { useLoadingContext } from "../hooks/context/loadingContext";
 import { useAppContext } from "../hooks/context/appContext";
 

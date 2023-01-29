@@ -92,8 +92,8 @@ const SideNavBarButton: React.FC<Props> = ({
       }`}
     >
       <div className="flex w-full items-center justify-center space-x-4">
-        <div>{icon}</div>
-        {!navBarBreakpoint && <div>{label}</div>}
+        {icon}
+        {!navBarBreakpoint && <p>{label}</p>}
       </div>
     </button>
   );

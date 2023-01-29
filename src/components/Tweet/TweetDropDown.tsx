@@ -3,9 +3,9 @@ import { BsThreeDots } from "react-icons/bs";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { trpc } from "../utils/api";
+import { trpc } from "../../utils/api";
 import type { Tweet, User } from "@prisma/client";
-import { useAppContext } from "../hooks/context/appContext";
+import { useAppContext } from "../../hooks/context/appContext";
 
 const TweetDropDown = ({
   tweet,
