@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 import { MdAccountCircle } from "react-icons/md";
-import Tweet from "../components/Tweet";
+import Tweet from "../components/Tweet/Tweet";
 import { trpc } from "../utils/api";
 import { useModalContext } from "../hooks/context/modalContext";
 
