@@ -32,4 +32,4 @@ jobs:
         echo "${{ secrets.NEXT_ENV }}" > .env
     - run: npm ci
     - run: npm run lint
-    - run: npm test:ci
+    - run: npm run test:ci
