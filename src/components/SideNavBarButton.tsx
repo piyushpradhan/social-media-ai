@@ -7,6 +7,7 @@ import { useLoadingContext } from "../hooks/context/loadingContext";
 import { useToggleContext } from "../hooks/context/toggleContext";
 import { generateRandomTweet } from "../utils/generateTweet";
 import useMediaQuery from "../hooks/mediaQuery";
+import { isValidKey } from "../utils/validate";
 
 type Props = {
   label: string;
@@ -42,6 +43,11 @@ const SideNavBarButton: React.FC<Props> = ({
     //   );
     //   loadingContext?.toggleTweetLoading(false);
     // }, 600);
+
+    if (userDetails?.key && !isValidKey(userDetails?.key)) {
+      appContext?.setMessage("API key is invalid");
+      toggleContext?.toggleMessage(true);
+    }
 
     userDetails?.key &&
       generateRandomTweet(userDetails?.personality || "", userDetails?.key)

@@ -14,6 +14,7 @@ import { useAppContext } from "../../hooks/context/appContext";
 import { generateRandomComment } from "../../utils/generateTweet";
 import { useRouter } from "next/router";
 import TweetDropDown from "./TweetDropDown";
+import { isValidKey } from "../../utils/validate";
 
 type Props = {
   tweet: TweetModel;
@@ -171,7 +172,11 @@ const Tweet: React.FC<Props> = ({
     //   loadingContext?.toggleTweetLoading?.(false);
     // }, 600);
 
-    // TODO: Show an alert or something
+    if (userDetails?.key && !isValidKey(userDetails?.key)) {
+      appContext?.setMessage("API key is invalid");
+      toggleContext?.toggleMessage(true);
+    }
+
     userDetails?.key &&
       generateRandomComment(tweet.tweet, userDetails?.key)
         .then((generated) => {

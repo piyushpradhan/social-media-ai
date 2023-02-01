@@ -10,6 +10,7 @@ import { TbArrowsShuffle } from "react-icons/tb";
 import Shimmer from "./loaders/Shimmer";
 import { trpc } from "../utils/api";
 import useMediaQuery from "../hooks/mediaQuery";
+import { isValidKey } from "../utils/validate";
 
 const NewTweet = ({ userDetails }: { userDetails: User }) => {
   const utils = trpc.useContext();
@@ -76,7 +77,11 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
     // }, 600);
     //
 
-    //TODO: add an alert or something
+    if (userDetails?.key && !isValidKey(userDetails?.key)) {
+      appContext?.setMessage("API key is invalid");
+      toggleContext?.toggleMessage(true);
+    }
+
     generateRandomTweet(userDetails?.personality ?? "", userDetails?.key)
       .then((generated) => {
         if (generated?.data?.choices[0]?.text === undefined) {

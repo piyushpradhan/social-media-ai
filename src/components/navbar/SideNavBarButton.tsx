@@ -7,6 +7,7 @@ import { useLoadingContext } from "../../hooks/context/loadingContext";
 import { useToggleContext } from "../../hooks/context/toggleContext";
 import { generateRandomTweet } from "../../utils/generateTweet";
 import useMediaQuery from "../../hooks/mediaQuery";
+import { isValidKey } from "../../utils/validate";
 
 type Props = {
   label: string;
@@ -43,25 +44,30 @@ const SideNavBarButton: React.FC<Props> = ({
     //   loadingContext?.toggleTweetLoading(false);
     // }, 600);
 
-    // TODO: add an alert or something
-    userDetails?.key && generateRandomTweet(userDetails?.personality || "", userDetails?.key)
-      .then((generated) => {
-        if (generated?.data?.choices[0]?.text === undefined) {
-          throw new Error("Could not generate tweet");
-        }
-        let newTweet: string | undefined =
-          generated?.data?.choices?.at(0)?.text;
-        if (newTweet?.includes("\n")) {
-          const lastNewLine = newTweet?.lastIndexOf("\n");
-          newTweet = newTweet?.substring(lastNewLine + 1);
-        }
+    if (userDetails?.key && !isValidKey(userDetails?.key)) {
+      appContext?.setMessage("API key is invalid");
+      toggleContext?.toggleMessage(true);
+    }
 
-        appContext?.setGeneratedTweet(newTweet ?? "");
-        loadingContext?.toggleTweetLoading(false);
-      })
-      .catch((err) => {
-        console.log("Error generating tweet", err);
-      });
+    userDetails?.key &&
+      generateRandomTweet(userDetails?.personality || "", userDetails?.key)
+        .then((generated) => {
+          if (generated?.data?.choices[0]?.text === undefined) {
+            throw new Error("Could not generate tweet");
+          }
+          let newTweet: string | undefined =
+            generated?.data?.choices?.at(0)?.text;
+          if (newTweet?.includes("\n")) {
+            const lastNewLine = newTweet?.lastIndexOf("\n");
+            newTweet = newTweet?.substring(lastNewLine + 1);
+          }
+
+          appContext?.setGeneratedTweet(newTweet ?? "");
+          loadingContext?.toggleTweetLoading(false);
+        })
+        .catch((err) => {
+          console.log("Error generating tweet", err);
+        });
   }
 
   const handleClick = () => {
