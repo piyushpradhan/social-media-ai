@@ -15,6 +15,7 @@ import { generateRandomComment } from "../../utils/generateTweet";
 import { useRouter } from "next/router";
 import TweetDropDown from "./TweetDropDown";
 import { isValidKey } from "../../utils/validate";
+import ReplyingToTag from "./ReplyingToTag";
 
 type Props = {
   tweet: TweetModel;
@@ -39,18 +40,6 @@ const Tweet: React.FC<Props> = ({
   const userDetails = trpc.mongo.getUser.useQuery({
     userId: tweet.userId,
   }).data;
-
-  let commentDetails;
-  let commentUserDetails;
-  if (tweet.commentId && scaled) {
-    commentDetails = trpc.mongo.getSingleTweet.useQuery({
-      tweetId: tweet.commentId ?? "",
-    }).data;
-
-    commentUserDetails = trpc.mongo.getUser.useQuery({
-      userId: commentDetails?.userId ?? "",
-    }).data;
-  }
 
   const likeTweetMutation = trpc.mongo.likeTweet.useMutation({
     onSuccess: async () => {
@@ -229,16 +218,7 @@ const Tweet: React.FC<Props> = ({
       }`}
     >
       <div className="flex w-full ">
-        {tweet.commentId && (
-          <p
-            className={`flex text-xs text-gray-500 ${
-              scaled ? "pl-16" : "ml-3 pl-12"
-            }`}
-          >
-            <BiSubdirectoryRight className="text-sm" /> Replying to{" "}
-            <span className="font-medium">{commentUserDetails?.name}</span>
-          </p>
-        )}
+        {tweet.commentId && <ReplyingToTag tweet={tweet} scaled={scaled} />}
       </div>
       <div className="flex h-full w-full space-x-2">
         <div className="flex h-full items-start">
