@@ -5,7 +5,6 @@ import { FiArrowLeft } from "react-icons/fi";
 import { trpc } from "../utils/api";
 import Tweet from "./Tweet/Tweet";
 import { useLoadingContext } from "../hooks/context/loadingContext";
-import { useAppContext } from "../hooks/context/appContext";
 
 type Props = {
   tweet: TweetModel;

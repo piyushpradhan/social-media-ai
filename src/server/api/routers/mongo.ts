@@ -162,6 +162,12 @@ export const mongoRouter = createTRPCRouter({
   deleteComment: protectedProcedure
     .input(z.object({ commentId: z.string(), tweetId: z.string() }))
     .mutation(async ({ input: { tweetId, commentId }, ctx }) => {
+      await ctx.prisma.tweet.deleteMany({
+        where: {
+          commentId: commentId,
+        },
+      });
+
       await ctx.prisma.tweet.delete({
         where: {
           id: commentId,

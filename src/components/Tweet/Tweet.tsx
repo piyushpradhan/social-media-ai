@@ -205,7 +205,7 @@ const Tweet: React.FC<Props> = ({
   }
 
   function openSingleTweet() {
-    if ((scaled && tweet.commentId) || scaled) {
+    if (scaled) {
       return;
     }
     appContext?.setSelectedTweet(tweet);

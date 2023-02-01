@@ -6,6 +6,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { trpc } from "../../utils/api";
 import type { Tweet, User } from "@prisma/client";
 import { useAppContext } from "../../hooks/context/appContext";
+import { useToggleContext } from "../../hooks/context/toggleContext";
 
 const TweetDropDown = ({
   tweet,
@@ -16,6 +17,7 @@ const TweetDropDown = ({
 }) => {
   const utils = trpc.useContext();
   const appContext = useAppContext();
+  const toggleContext = useToggleContext();
 
   const deleteTweetMutation = trpc.mongo.deleteTweet.useMutation({
     onSuccess: async () => {
@@ -26,12 +28,44 @@ const TweetDropDown = ({
     },
   });
 
+  const deleteCommentMutation = trpc.mongo.deleteComment.useMutation({
+    onSuccess: async () => {
+      if (toggleContext?.isOpen.isSingleTweetOpen) {
+        await utils.mongo.getSingleTweet.refetch({
+          tweetId: tweet.id,
+        });
+        await utils.mongo.getComments.invalidate();
+      } else {
+        await utils.mongo.getTweets.invalidate();
+      }
+    },
+  });
+
   function deleteTweet() {
     if (currentUser.id === tweet.userId) {
       deleteTweetMutation.mutate({
         tweetId: tweet.id,
         tweetUserId: tweet.userId,
       });
+    }
+  }
+
+  function deleteComment() {
+    if (currentUser.id === tweet.userId && tweet.commentId != null) {
+      deleteCommentMutation.mutate({
+        tweetId: tweet.commentId,
+        commentId: tweet.id,
+      });
+    }
+  }
+
+  function handleDelete() {
+    if (currentUser.id === tweet.userId) {
+      if (tweet.commentId != null) {
+        deleteComment();
+      } else {
+        deleteTweet();
+      }
     }
   }
 
@@ -54,7 +88,7 @@ const TweetDropDown = ({
             <Menu.Item>
               {({ active }) => (
                 <button
-                  onClick={deleteTweet}
+                  onClick={handleDelete}
                   className={`${
                     active ? "bg-black text-white" : "bg-white"
                   } group flex w-full items-center rounded-md border-2 border-black px-2 py-2 text-sm`}
