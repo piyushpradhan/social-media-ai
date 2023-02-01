@@ -18,6 +18,17 @@ export type AppComponentProps = {
   children: ReactNode;
 };
 
+export type InitialLoadingState = {
+  loading: boolean;
+  tweetLoading: boolean;
+};
+
+export type LoadingContextType = {
+  loading: InitialLoadingState;
+  toggleLoading: (value: boolean) => void;
+  toggleTweetLoading: (value: boolean) => void;
+};
+
 export type ModalStateType = {
   isProfileModalOpen: boolean;
   isKeyPromptModalOpen: boolean;

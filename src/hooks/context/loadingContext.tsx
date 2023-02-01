@@ -1,12 +1,8 @@
-import { createContext, useState, ReactNode, useContext } from "react";
+import type { ReactNode } from "react";
+import { createContext, useState, useContext } from "react";
+import type { InitialLoadingState, LoadingContextType } from "../../types";
 
-type LoadingContextType = {
-  loading: typeof initialState;
-  toggleLoading: (value: boolean) => void;
-  toggleTweetLoading: (value: boolean) => void;
-};
-
-const initialState = {
+const initialState: InitialLoadingState = {
   loading: true,
   tweetLoading: true,
 };
@@ -14,7 +10,7 @@ const initialState = {
 export const LoadingContext = createContext<LoadingContextType | null>(null);
 
 export function LoadingProvider({ children }: { children: ReactNode }) {
-  const [isLoading, setIsLoading] = useState<typeof initialState>(initialState);
+  const [isLoading, setIsLoading] = useState<InitialLoadingState>(initialState);
 
   function toggleLoading(value: boolean) {
     setIsLoading({ ...isLoading, loading: value });
@@ -25,7 +21,9 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <LoadingContext.Provider value={{ loading: isLoading, toggleLoading, toggleTweetLoading }}>
+    <LoadingContext.Provider
+      value={{ loading: isLoading, toggleLoading, toggleTweetLoading }}
+    >
       {children}
     </LoadingContext.Provider>
   );
