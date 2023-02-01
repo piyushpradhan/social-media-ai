@@ -206,7 +206,7 @@ const Tweet: React.FC<Props> = ({
       .push(`/profile/${userDetails?.id ?? ""}`)
       .then(() => {
         // close the single tweet
-        // toggleContext?.toggleSingleTweet(false);
+        toggleContext?.toggleSingleTweet(false);
       })
       .catch((err: any) => console.error(err));
   }
