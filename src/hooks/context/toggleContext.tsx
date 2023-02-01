@@ -1,26 +1,6 @@
-import { createContext, ReactNode, useContext, useState } from "react";
-
-type ToggleStateType = {
-  isNewTweetOpen: boolean;
-  isNewCommentOpen: boolean;
-  isSingleTweetOpen: boolean;
-  isKeyPromptOpen: boolean;
-  isInvalidKeyOpen: boolean;
-};
-
-type ToggleContextType = {
-  isOpen: ToggleStateType;
-  toggleNewTweet: () => void;
-  closeNewTweet: () => void;
-  toggleNewComment: () => void;
-  toggleSingleTweet: (value: boolean) => void;
-  toggleKeyPrompt: (value: boolean) => void;
-  toggleIsInvalidKey: (value: boolean) => void;
-};
-
-type ToggleComponentPropsType = {
-  children: ReactNode;
-};
+import type { ReactNode } from "react";
+import { createContext, useContext, useState } from "react";
+import type { ToggleStateType, ToggleContextType } from "../../types";
 
 const initialState: ToggleStateType = {
   isNewTweetOpen: false,

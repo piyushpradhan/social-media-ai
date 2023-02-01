@@ -45,3 +45,21 @@ export type ModalContextType = {
 export type ModalPropsType = {
   children: ReactNode;
 };
+
+export type ToggleStateType = {
+  isNewTweetOpen: boolean;
+  isNewCommentOpen: boolean;
+  isSingleTweetOpen: boolean;
+  isKeyPromptOpen: boolean;
+  isInvalidKeyOpen: boolean;
+};
+
+export type ToggleContextType = {
+  isOpen: ToggleStateType;
+  toggleNewTweet: () => void;
+  closeNewTweet: () => void;
+  toggleNewComment: () => void;
+  toggleSingleTweet: (value: boolean) => void;
+  toggleKeyPrompt: (value: boolean) => void;
+  toggleIsInvalidKey: (value: boolean) => void;
+};
