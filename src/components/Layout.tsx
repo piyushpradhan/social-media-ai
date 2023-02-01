@@ -13,6 +13,7 @@ import { useAppContext } from "../hooks/context/appContext";
 import { useToggleContext } from "../hooks/context/toggleContext";
 import SideNavBar from "./navbar/SideNavBar";
 import NoApiKeyModal from "./NoApiKeyModal";
+import FloatingMessage from "./FloatingMessage";
 
 const Layout = ({ children }: { children: ReactElement }) => {
   const isMobileBreakpoint = useMediaQuery(500);
@@ -47,6 +48,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
           <RxGear size={20} onClick={openModal} className="cursor-pointer" />
         )}
       </div>
+      <FloatingMessage />
       {isMobileBreakpoint ? (
         <div className="h-screen overflow-y-auto pt-14 pb-24">{children}</div>
       ) : (

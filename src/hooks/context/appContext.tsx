@@ -10,6 +10,7 @@ const initialState = {
   generatedTweet: "",
   generatedComment: "",
   selectedTweet: null,
+  message: "",
 };
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -38,6 +39,13 @@ export function AppProvider({ children }: AppComponentProps) {
     }));
   }
 
+  function setMessage(message: string) {
+    setAppState((prev) => ({
+      ...prev,
+      message: message,
+    }));
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -45,6 +53,7 @@ export function AppProvider({ children }: AppComponentProps) {
         setGeneratedTweet,
         setGeneratedComment,
         setSelectedTweet,
+        setMessage,
       }}
     >
       {children}

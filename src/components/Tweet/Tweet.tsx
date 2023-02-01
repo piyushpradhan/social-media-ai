@@ -86,6 +86,8 @@ const Tweet: React.FC<Props> = ({
       } else {
         await utils.mongo.getTweets.invalidate();
       }
+      appContext?.setMessage("Retweeted!");
+      toggleContext?.toggleMessage(true);
     },
   });
   const undoRetweetMutation = trpc.mongo.undoRetweet.useMutation({
@@ -128,12 +130,6 @@ const Tweet: React.FC<Props> = ({
 
     return tweet.retweetedUserIDs.includes(currentUserDetails?.id ?? "");
   }
-
-  // function deleteComment() {
-  //   deleteCommentMutation.mutate({
-  //
-  //     });
-  // }
 
   function retweet() {
     if (!isRetweeted) {

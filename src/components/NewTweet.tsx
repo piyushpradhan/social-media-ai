@@ -29,6 +29,8 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
     onSuccess: async () => {
       await utils.mongo.getTweets.invalidate();
       toggleTweetLoading?.(false);
+      appContext?.setMessage("Tweet posted!");
+      toggleContext?.toggleMessage(true);
     },
   });
 
@@ -37,6 +39,8 @@ const NewTweet = ({ userDetails }: { userDetails: User }) => {
       await utils.mongo.getComments.invalidate();
       await utils.mongo.getTweets.invalidate();
       toggleTweetLoading?.(false);
+      appContext?.setMessage("Comment posted!");
+      toggleContext?.toggleMessage(true);
     },
   });
 

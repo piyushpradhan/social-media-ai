@@ -5,6 +5,7 @@ export type AppStateType = {
   generatedTweet: string;
   generatedComment: string;
   selectedTweet: Tweet | null;
+  message: string;
 };
 
 export type AppContextType = {
@@ -12,6 +13,7 @@ export type AppContextType = {
   setGeneratedTweet: (tweet: string) => void;
   setGeneratedComment: (comment: string) => void;
   setSelectedTweet: (tweet: Tweet) => void;
+  setMessage: (message: string) => void;
 };
 
 export type AppComponentProps = {
@@ -52,6 +54,7 @@ export type ToggleStateType = {
   isSingleTweetOpen: boolean;
   isKeyPromptOpen: boolean;
   isInvalidKeyOpen: boolean;
+  isMessageOpen: boolean;
 };
 
 export type ToggleContextType = {
@@ -62,4 +65,5 @@ export type ToggleContextType = {
   toggleSingleTweet: (value: boolean) => void;
   toggleKeyPrompt: (value: boolean) => void;
   toggleIsInvalidKey: (value: boolean) => void;
+  toggleMessage: (value: boolean) => void;
 };

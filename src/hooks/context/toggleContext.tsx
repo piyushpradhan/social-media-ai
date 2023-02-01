@@ -8,6 +8,7 @@ const initialState: ToggleStateType = {
   isSingleTweetOpen: false,
   isKeyPromptOpen: false,
   isInvalidKeyOpen: false,
+  isMessageOpen: false,
 };
 
 const ToggleContext = createContext<ToggleContextType | null>(null);
@@ -26,39 +27,46 @@ export function ToggleProvider({ children }: { children: ReactNode }) {
   }
 
   function closeNewTweet() {
-    setIsOpen({
-      ...isOpen,
+    setIsOpen((prev) => ({
+      ...prev,
       isNewTweetOpen: false,
       isNewCommentOpen: false,
-    });
+    }));
   }
 
   function toggleNewComment() {
-    setIsOpen({
+    setIsOpen((prev) => ({
       ...isOpen,
       isNewTweetOpen: isOpen.isNewTweetOpen ? false : isOpen.isNewTweetOpen,
       isNewCommentOpen: !isOpen.isNewCommentOpen,
-    });
+    }));
   }
 
   function toggleSingleTweet(value: boolean) {
-    setIsOpen({
+    setIsOpen((prev) => ({
       ...isOpen,
       isSingleTweetOpen: value ?? !isOpen.isSingleTweetOpen,
-    });
+    }));
   }
 
   function toggleKeyPrompt(value: boolean) {
-    setIsOpen({
-      ...isOpen,
+    setIsOpen((prev) => ({
+      ...prev,
       isKeyPromptOpen: value ?? !isOpen.isKeyPromptOpen,
-    });
+    }));
   }
 
   function toggleIsInvalidKey(value: boolean) {
     setIsOpen((prev) => ({
-      ...isOpen,
+      ...prev,
       isInvalidKeyOpen: value ?? !prev.isInvalidKeyOpen,
+    }));
+  }
+
+  function toggleMessage(value: boolean) {
+    setIsOpen((prev) => ({
+      ...prev,
+      isMessageOpen: value ?? !prev.isMessageOpen,
     }));
   }
 
@@ -72,6 +80,7 @@ export function ToggleProvider({ children }: { children: ReactNode }) {
         toggleSingleTweet,
         toggleKeyPrompt,
         toggleIsInvalidKey,
+        toggleMessage,
       }}
     >
       {children}
