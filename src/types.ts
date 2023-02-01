@@ -1,4 +1,22 @@
+import type { Tweet } from "@prisma/client";
 import type { ReactNode } from "react";
+
+export type AppStateType = {
+  generatedTweet: string;
+  generatedComment: string;
+  selectedTweet: Tweet | null;
+};
+
+export type AppContextType = {
+  appState: AppStateType;
+  setGeneratedTweet: (tweet: string) => void;
+  setGeneratedComment: (comment: string) => void;
+  setSelectedTweet: (tweet: Tweet) => void;
+};
+
+export type AppComponentProps = {
+  children: ReactNode;
+};
 
 export type ModalStateType = {
   isProfileModalOpen: boolean;

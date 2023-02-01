@@ -1,23 +1,10 @@
-import { Tweet } from "@prisma/client";
-import type { ReactNode } from "react";
+import type { Tweet } from "@prisma/client";
 import { createContext, useState, useContext } from "react";
-
-type AppStateType = {
-  generatedTweet: string;
-  generatedComment: string;
-  selectedTweet: Tweet | null;
-};
-
-type AppContextType = {
-  appState: AppStateType;
-  setGeneratedTweet: (tweet: string) => void;
-  setGeneratedComment: (comment: string) => void;
-  setSelectedTweet: (tweet: Tweet) => void;
-};
-
-type AppComponentProps = {
-  children: ReactNode;
-};
+import type {
+  AppContextType,
+  AppStateType,
+  AppComponentProps,
+} from "../../types";
 
 const initialState = {
   generatedTweet: "",
