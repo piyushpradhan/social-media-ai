@@ -1,22 +1,6 @@
 import type { ReactNode } from "react";
 import { createContext, useContext, useState } from "react";
-
-type ModalStateType = {
-  isProfileModalOpen: boolean;
-  isKeyPromptModalOpen: boolean;
-  key: string;
-};
-
-type ModalContextType = {
-  modalState: ModalStateType;
-  toggleModal: (value?: boolean) => void;
-  toggleKeyPromptModal: (value?: boolean) => void;
-  setKey: (key: string) => void;
-};
-
-type ModalPropsType = {
-  children: ReactNode;
-};
+import type { ModalStateType, ModalContextType } from "../../types";
 
 const initialState: ModalStateType = {
   isProfileModalOpen: false,
