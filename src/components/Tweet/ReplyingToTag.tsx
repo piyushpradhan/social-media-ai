@@ -18,12 +18,13 @@ const ReplyingToTag: React.FC<Props> = ({ tweet, scaled = false }: Props) => {
   }).data;
   return (
     <p
-      className={`flex text-xs text-gray-500 ${
+      className={`flex items-center gap-1 text-xs text-gray-500 ${
         scaled ? "pl-16" : "ml-3 pl-12"
       }`}
     >
-      <BiSubdirectoryRight className="text-sm" /> Replying to{" "}
-      <span className="font-medium">{commentUserDetails?.name}</span>
+      <BiSubdirectoryRight className="text-sm" />
+      <p>Replying to</p>
+      <p className="font-medium">{commentUserDetails?.name}</p>
     </p>
   );
 };

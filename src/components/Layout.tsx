@@ -42,17 +42,17 @@ const Layout = ({ children }: { children: ReactElement }) => {
       {userDetails?.key === "" && <NoApiKeyModal />}
       <UpdateProfileModal />
       {/* Top nav bar */}
-      <div className="fixed z-10 flex w-full items-center justify-between border-b border-black bg-white p-4">
-        <p className="text-xl font-semibold">Litter</p>
+      <div className="fixed z-10 flex w-full items-center justify-between border-b border-black bg-white py-3 px-6">
+        <p className="text-xl font-semibold">Twitteligence</p>
         {router.pathname === "/profile" && (
           <RxGear size={20} onClick={openModal} className="cursor-pointer" />
         )}
       </div>
       <FloatingMessage />
       {isMobileBreakpoint ? (
-        <div className="h-screen overflow-y-auto pt-14 pb-24">{children}</div>
+        <div className="h-screen overflow-y-auto pt-12 pb-24">{children}</div>
       ) : (
-        <div className="px-8 pt-14 pb-48">
+        <div className="px-8 pt-12 pb-48">
           <div className="grid h-full w-full grid-cols-5 gap-4 lg:grid-cols-7">
             <div className="col-span-1 h-full lg:col-span-2">
               {userDetails && <SideNavBar userDetails={userDetails} />}

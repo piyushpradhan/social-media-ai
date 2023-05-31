@@ -98,7 +98,7 @@ const SideNavBarButton: React.FC<Props> = ({
       } text-xl transition-all duration-200 ${isActive ? "font-bold" : ""} ${
         isYeet
           ? "rounded-md border-2 border-black bg-black font-bold text-white hover:bg-white hover:text-black"
-          : "rounded-full bg-white text-black hover:bg-gray-200/50 hover:text-black"
+          : "rounded-full bg-white text-black hover:bg-gray-200/30 hover:text-black"
       }`}
     >
       <div className="flex w-full items-center justify-center space-x-4">
